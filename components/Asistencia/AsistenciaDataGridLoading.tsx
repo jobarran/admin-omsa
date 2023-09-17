@@ -4,7 +4,7 @@ import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { useEffect, useState } from 'react';
 
-export const MOBILE_COLUMNS = {
+const MOBILE_COLUMNS = {
   id: false,
   name: true,
   obra: true,
@@ -13,7 +13,7 @@ export const MOBILE_COLUMNS = {
   salida: true,
   tarea: true,
 };
-export const ALL_COLUMNS = {
+const ALL_COLUMNS = {
   id: true,
   name: true,
   obra: true,

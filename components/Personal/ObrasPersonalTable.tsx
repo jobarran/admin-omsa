@@ -21,7 +21,7 @@ interface Props {
       }[],
 }
 
-export const MOBILE_COLUMNS = {
+const MOBILE_COLUMNS = {
     id: true,
     name: true,
     obra: true,
@@ -31,7 +31,7 @@ export const MOBILE_COLUMNS = {
     antiguedad: false,
     actions: true
   };
-  export const ALL_COLUMNS = {
+  const ALL_COLUMNS = {
     id: true,
     name: true,
     obra: true,
@@ -45,6 +45,7 @@ export const MOBILE_COLUMNS = {
 export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) => {
 
     const rows: GridRowsProp  = data.map( operario => ({
+        key: operario.legajo,
         id: operario.legajo,
         name: operario.lastName + ' ' + operario.name,
         obra: operario.obra,
@@ -132,22 +133,22 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             maxWidth: 200,
             editable: false,
         },
-        {
-            field: 'actions',
-            headerName: 'Ver',
-            type: 'actions',
-            flex: 1,
-            minWidth: 50,
-            maxWidth: 100,
-            editable: false,
-            getActions: (params: any) => [
-                <GridActionsCellItem
-                icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
-                label="Open"
-                onClick={ editUser(params.id) }
-                />,
-            ],
-        },
+        // {
+        //     field: 'actions',
+        //     headerName: 'Ver',
+        //     type: 'actions',
+        //     flex: 1,
+        //     minWidth: 50,
+        //     maxWidth: 100,
+        //     editable: false,
+        //     getActions: (params: any) => [
+        //         <GridActionsCellItem
+        //             icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
+        //             label="Open"
+        //             onClick={ editUser(params.id) }
+        //         />,
+        //     ],
+        // },
 
       ];
 
