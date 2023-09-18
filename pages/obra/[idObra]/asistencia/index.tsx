@@ -47,7 +47,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   ] 
 
   useEffect(() => {
-      // onGetOrCreateAsistencia()
+      onGetOrCreateAsistencia()
   }, [dayValue])  
 
   useEffect(() => {

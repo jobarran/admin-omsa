@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 
-import { Alert, Avatar, Box, Button, Card, CardHeader, Divider, Grid, IconButton, Menu, MenuItem, Snackbar, useMediaQuery, useTheme } from '@mui/material';
+import { Alert, Avatar, Box, Button, Card, CardHeader, Divider, Grid, Snackbar, useMediaQuery, useTheme } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
 
 import { UiContext } from '@/context'
@@ -8,8 +8,7 @@ import { horarios, tareas } from '@/config'
 import { Asistencia } from '@/interfaces'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
-import { AutoFill, QuickSearch } from '../DataGrid';
-import { MoreVert } from '@mui/icons-material';
+import { QuickSearch } from '../DataGrid';
 import { DotMenu } from '../DataGrid';
 
 interface Props {
