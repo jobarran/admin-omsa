@@ -13,8 +13,8 @@ type Data =
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     
     switch (req.method) {
-        // case 'GET':
-        //     return getAsistencia( req, res );
+        case 'GET':
+            return getAsistencia( req, res );
             
         case 'PUT':
             return updateAsistencia( req, res );
@@ -29,16 +29,25 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
  
 }
 
-// const getAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     
-//     await db.connect();
+    try {
 
+        await db.connect();
+        const asistencia = await Asistencia.find()
+                                         .lean();
+    
+        await db.disconnect();
+        return res.status(200).json( asistencia );
+        
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar logs del servidor' });
+    }
 
-
-//     await db.disconnect();
-
-// }
+}
 
 
 const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {

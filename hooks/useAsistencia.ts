@@ -1,9 +1,8 @@
 import { IAsistencia, IObra } from '@/interfaces'
-import axios from 'axios'
 import useSWR, { SWRConfiguration } from 'swr'
 
 
-const fetcher = (url:any) => axios.get(url).then(res => res.data)
+const fetcher = (...args: [key: string]) => fetch(...args).then(res => res.json())
 
 export const useAsistencia = (url: string, config: SWRConfiguration = {} ) => {
 
