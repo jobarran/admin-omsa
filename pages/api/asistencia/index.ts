@@ -114,7 +114,7 @@ const createAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
    
     try {
         await db.connect();
-        const asistenciaInDB = await Asistencia.findOne({ fecha: fecha });
+        const asistenciaInDB = await Asistencia.findOne({ fecha:  fecha ? fecha : '' });
         if ( asistenciaInDB ) {
             await db.disconnect();
             return res.status(201).json( asistenciaInDB );

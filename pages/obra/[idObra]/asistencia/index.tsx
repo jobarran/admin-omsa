@@ -47,7 +47,26 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   ] 
 
   useEffect(() => {
-      onGetOrCreateAsistencia()
+
+    const onGetOrCreateAsistencia = async () => {
+    
+      const {data} = await adminObraApi.post(`/asistencia`, { 
+        fecha: dayValue.format('YYYYMMDD').toString(),
+        asistenciaData: isLoading ? dataPersonal : [],
+        clima: parte.clima,
+        montaje: parte.montaje,
+        observaciones: parte.observaciones
+       });
+  
+      setParte({
+        clima: data.clima,
+        montaje: data.montaje,
+        observaciones: data.observaciones
+      })
+  
+    }
+
+    onGetOrCreateAsistencia()
   }, [dayValue])  
 
   useEffect(() => {
@@ -67,23 +86,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
     }))
   }
 
-  const onGetOrCreateAsistencia = async () => {
-    
-    const {data} = await adminObraApi.post(`/asistencia`, { 
-      fecha: dayValue.format('YYYYMMDD').toString(),
-      asistenciaData: isLoading ? dataPersonal : [],
-      clima: parte.clima,
-      montaje: parte.montaje,
-      observaciones: parte.observaciones
-     });
-
-    setParte({
-      clima: data.clima,
-      montaje: data.montaje,
-      observaciones: data.observaciones
-    })
-
-  }
+  
 
   const onUpdateAsistenciaById = async (rows: any) => {
 
