@@ -56,6 +56,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   
 
   const handleDayValueChange = (newValue: any) => {
+    console.log('cambiando fecha')
     setDayValue(newValue)
   } 
 
@@ -146,7 +147,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              !!dataAsistencia && !isLoading && !error
+              !!dataAsistencia && !isLoading
               ?
               <AsistenciaDataGrid
                 data={dataAsistencia}

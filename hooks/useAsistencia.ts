@@ -1,28 +1,16 @@
 import { IAsistencia, IObra } from '@/interfaces'
+import axios from 'axios'
 import useSWR, { SWRConfiguration } from 'swr'
 
 
-const fetcher = (...args: [key: string]) => fetch(...args).then(res => res.json())
+const fetcher = (url:any) => axios.get(url).then(res => res.data)
 
 export const useAsistencia = (url: string, config: SWRConfiguration = {} ) => {
 
     const { data, error, isLoading, mutate } = useSWR<IAsistencia[]>(
         `/api/${ url }`,
-        fetcher, {
-            onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-              // Never retry on 404.
-            //   if (error.status === 404) return
-           
-              // Never retry for a specific key.
-            //   if (key === '/api/user') return
-           
-              // Only retry up to 10 times.
-              if (retryCount >= 10) return
-           
-              // Retry after 5 seconds.
-              setTimeout(() => revalidate({ retryCount }), 2000)
-            }
-        })
+        fetcher
+    )
 
     return {
         data: data || [],
