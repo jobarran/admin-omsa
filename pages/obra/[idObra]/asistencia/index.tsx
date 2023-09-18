@@ -50,12 +50,9 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
 
     const onGetOrCreateAsistencia = async () => {
 
-      console.log(dataPersonal) //TODO: asegurarse de tener dataPersonal y fecha
-      console.log(dayValue.format('YYYYMMDD').toString())
-      
       const {data} = await adminObraApi.post(`/asistencia`, { 
         fecha: dayValue.format('YYYYMMDD').toString(),
-        asistenciaData: dataPersonal ? dataPersonal : [],
+        asistenciaData: dataPersonal,
         clima: parte.clima,
         montaje: parte.montaje,
         observaciones: parte.observaciones
@@ -70,6 +67,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
     }
 
     onGetOrCreateAsistencia()
+    
   }, [dayValue])  
 
   useEffect(() => {

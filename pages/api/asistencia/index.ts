@@ -95,38 +95,43 @@ const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
 
 const createAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const { fecha = '', asistenciaData = '' } = req.body as { fecha: string, asistenciaData: any };
+    const { fecha = '', asistenciaData } = req.body as { fecha: string, asistenciaData: any };
 
     try {
         await db.connect();
         const asistenciaInDB = await Asistencia.findOne({ fecha:  fecha ? fecha : '' });
+        
         if ( asistenciaInDB ) {
             await db.disconnect();
             return res.status(201).json( asistenciaInDB );
         }
 
-        const data = {
-            fecha: fecha,
-            clima: '',
-            montaje: '',
-            observaciones: '',
-            asistenciaData: asistenciaData.map((obj: any ) => ({
-                 name: obj.name,
-                 lastName: obj.lastName,
-                 obra: obj.obra,
-                 legajo: obj.legajo,
-                 ingreso: '',
-                 salida: '',
-                 estado: '',
-                 tarea: ''
-                }))
-        }
-        
-        const asistencia = new Asistencia( data );
-        await asistencia.save();
-        await db.disconnect();
-        return res.status(201).json( asistencia );
+        if ( asistenciaData ) {
+            console.log('hay data')
 
+            const data = {
+                fecha: fecha,
+                clima: '',
+                montaje: '',
+                observaciones: '',
+                asistenciaData: asistenciaData.map((obj: any ) => ({
+                    name: obj.name,
+                    lastName: obj.lastName,
+                    obra: obj.obra,
+                    legajo: obj.legajo,
+                    ingreso: '',
+                    salida: '',
+                    estado: '',
+                    tarea: ''
+                    }))
+            }
+            
+            const asistencia = new Asistencia( data );
+            await asistencia.save();
+            await db.disconnect();
+            return res.status(201).json( asistencia );
+        } else
+        console.log('no hay data')
 
     } catch (error) {
         console.log(error);
