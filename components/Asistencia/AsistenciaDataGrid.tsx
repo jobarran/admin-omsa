@@ -44,7 +44,7 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
 
   console.log(data)
 
-  if ( !data )  { <AsistenciaDataGridLoading /> }
+  // if ( !data )  { <AsistenciaDataGridLoading /> }
 
   const initialRows: GridRowsProp  = data.asistenciaData.map( (personal: Asistencia) => ({
     id: personal.legajo,
@@ -71,9 +71,9 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
       setColumnVisible(newColumns);
   }, [matches]);
 
-  useEffect(() => {
-    setRows(initialRows)
-  }, [data])
+  // useEffect(() => {
+  //   setRows(initialRows)
+  // }, [data])
   
 
   useEffect(() => {
