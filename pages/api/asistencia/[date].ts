@@ -31,12 +31,12 @@ type Data =
 
 const getAsistenciaByDate = async (req: NextApiRequest, res: NextApiResponse<Data>) => {    
 
-    await db.connect();
     const { date = '' } = req.query 
     
     try {
-
-        const asistencia = await Asistencia.findOne({ fecha : date }).lean()
+        
+        await db.connect();
+        const asistencia = await Asistencia.findOne({ fecha : date ? date : '' }).lean()
         await db.disconnect();
         
         if( !asistencia ) {
@@ -65,7 +65,7 @@ const updateAsistenciaByDate = async (req: NextApiRequest, res: NextApiResponse<
     try {
 
         await db.connect();
-        const asistencia:any = await Asistencia.findOne({ fecha : date }).lean()
+        const asistencia:any = await Asistencia.findOne({ fecha : date ? date : '' }).lean()
     
         if ( !asistencia ) {
             await db.disconnect();
@@ -93,7 +93,7 @@ const updateAsistenciaByDate = async (req: NextApiRequest, res: NextApiResponse<
         
         
         const updatedAsistencia: IAsistencia | null = await Asistencia.findOneAndUpdate(
-            { fecha:date },
+            { fecha: date ? date : '' },
             {
                 asistenciaData:updatedData,
                 clima:clima,
