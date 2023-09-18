@@ -40,6 +40,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   const { data: dataPersonal } = usePersonal(`/personal`)
   const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
 
+
   useEffect(() => {
     mutate()
   }, [isMutating===true])
@@ -144,7 +145,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              !!dataAsistencia && !isLoading
+              !!dataAsistencia && !isLoading 
               ?
               <AsistenciaDataGrid
                 data={dataAsistencia}

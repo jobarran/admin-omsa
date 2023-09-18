@@ -10,6 +10,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import { QuickSearch } from '../DataGrid';
 import { DotMenu } from '../DataGrid';
+import { AsistenciaDataGridLoading } from '.';
 
 interface Props {
   data: any
@@ -41,7 +42,9 @@ const ALL_COLUMNS = {
 
 export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUpdatePersonal, setIsMutating, isMutating}) => {
 
-  // if ( !data ) { <></> }
+  console.log(data)
+
+  if ( !data )  return <AsistenciaDataGridLoading />
 
   const initialRows: GridRowsProp  = data.asistenciaData.map( (personal: Asistencia) => ({
     id: personal.legajo,
