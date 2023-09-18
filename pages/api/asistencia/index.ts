@@ -3,8 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '../../../database';
 import { IAsistencia } from '@/interfaces';
 import { Asistencia } from '@/models';
-import { AsistenciaDataGrid } from '../../../components/Asistencia/AsistenciaDataGrid';
-import { FlattenMaps } from 'mongoose';
 
 
 type Data = 
@@ -107,7 +105,10 @@ const createAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
    
     try {
         await db.connect();
+
         const asistenciaInDB = await Asistencia.findOne({ fecha: fecha });
+        console.log('findOne asistencia en BD by Date')
+        console.log(fecha)
         
         if ( asistenciaInDB ) {
             await db.disconnect();
