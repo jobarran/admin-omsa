@@ -1,8 +1,9 @@
 import { IPersonal } from '@/interfaces'
+import axios from 'axios'
 import useSWR, { SWRConfiguration } from 'swr'
 
 
-const fetcher = (...args: [key: string]) => fetch(...args).then(res => res.json())
+const fetcher = (url:any) => axios.get(url).then(res => res.data)
 
 export const usePersonal = (url: string, config: SWRConfiguration = {} ) => {
 
