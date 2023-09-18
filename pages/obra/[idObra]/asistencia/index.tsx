@@ -130,7 +130,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
             />
 
             {
-              data && !isLoading 
+              !!data && !isLoading 
               ? 
               <AsistenciaWeatherCard
                 parte={parte}
@@ -145,7 +145,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              data && !isLoading
+              !!data && !isLoading
               ?
               <AsistenciaDataGrid
                 data={data}

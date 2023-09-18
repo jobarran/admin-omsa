@@ -42,6 +42,8 @@ const ALL_COLUMNS = {
 
 export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUpdatePersonal, setIsMutating, isMutating}) => {
 
+  if ( !data ) { <></> }
+
   const initialRows: GridRowsProp  = data.asistenciaData.map( (personal: Asistencia) => ({
     id: personal.legajo,
     name: personal.lastName + ' ' + personal.name,
