@@ -33,16 +33,27 @@ const getAsistenciaByDate = async (req: NextApiRequest, res: NextApiResponse<Dat
 
     await db.connect();
     const { date = '' } = req.query 
-    const asistencia = await Asistencia.findOne({ fecha : date }).lean()
-    await db.disconnect();
-
-    if( !asistencia ) {
-        return res.status(404).json({
-            message: 'Asistencia no encontrada'
-        })
-    }
     
-    return res.status(200).json( asistencia )
+    try {
+
+        const asistencia = await Asistencia.findOne({ fecha : date }).lean()
+        await db.disconnect();
+        
+        if( !asistencia ) {
+            return res.status(404).json({
+                message: 'Asistencia no encontrada'
+            })
+        }
+        
+        return res.status(200).json( asistencia )
+
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar la consola del servidor' });
+    }
+
+    
 }
 
 
