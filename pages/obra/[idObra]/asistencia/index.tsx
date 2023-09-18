@@ -146,7 +146,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              !!dataAsistencia && !isLoading
+              !!dataAsistencia && !isLoading && !error
               ?
               <AsistenciaDataGrid
                 data={dataAsistencia}
