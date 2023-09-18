@@ -40,44 +40,37 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   const { data: dataPersonal } = usePersonal(`/personal`)
   const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
 
+  useEffect(() => {
+    mutate()
+  }, [isMutating===true])
 
   const breadcrumbsRef = [
     { key: 'obra', name: activeObra?.name, link: `/obra/${activeObra?.idObra}` },
     { key: 'breadSecond', name: 'asistencia', link: undefined },
   ] 
 
-  useEffect(() => {
+  const onGetOrCreateAsistencia = async (newValue: any) => {
 
-    const onGetOrCreateAsistencia = async () => {
+    const {data} = await adminObraApi.post(`/asistencia`, { 
+      fecha: newValue.format('YYYYMMDD').toString(),
+      asistenciaData: dataPersonal,
+      clima: parte.clima,
+      montaje: parte.montaje,
+      observaciones: parte.observaciones
+      });
 
-      const {data} = await adminObraApi.post(`/asistencia`, { 
-        fecha: dayValue.format('YYYYMMDD').toString(),
-        asistenciaData: dataPersonal,
-        clima: parte.clima,
-        montaje: parte.montaje,
-        observaciones: parte.observaciones
-       });
-  
-      setParte({
-        clima: data.clima,
-        montaje: data.montaje,
-        observaciones: data.observaciones
-      })
-  
-    }
+    setParte({
+      clima: data.clima,
+      montaje: data.montaje,
+      observaciones: data.observaciones
+    })
 
-    onGetOrCreateAsistencia()
-    
-  }, [dayValue])  
-
-  useEffect(() => {
-      mutate()
-  }, [isMutating===true])
-  
+  }
 
   const handleDayValueChange = (newValue: any) => {
     console.log('cambiando fecha')
     setDayValue(newValue)
+    onGetOrCreateAsistencia(newValue)
   } 
 
   const handleParteChange = (newValue: any) => {
