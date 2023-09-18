@@ -52,7 +52,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
     
       const {data} = await adminObraApi.post(`/asistencia`, { 
         fecha: dayValue.format('YYYYMMDD').toString(),
-        asistenciaData: isLoading ? dataPersonal : [],
+        asistenciaData: dataPersonal ? dataPersonal : [],
         clima: parte.clima,
         montaje: parte.montaje,
         observaciones: parte.observaciones

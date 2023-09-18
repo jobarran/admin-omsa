@@ -55,7 +55,7 @@ const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
     const { fecha = '', data = '' } = req.body as { fecha: string, data: any };
 
     await db.connect();
-    const asistencia: any = await Asistencia.findOne({ fecha : fecha }).lean()
+    const asistencia: any = await Asistencia.findOne({ fecha : fecha ? fecha : '' }).lean()
     
 
     if ( !asistencia ) {
@@ -96,21 +96,6 @@ const createAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
 
     const { fecha = '', asistenciaData = '' } = req.body as { fecha: string, asistenciaData: any };
 
-
-    const data = {
-        fecha: fecha,
-        clima: '',
-        montaje: '',
-        observaciones: '',
-        asistenciaData: asistenciaData.map((obj: object ) => ({
-             ...obj,
-             ingreso: '',
-             salida: '',
-             estado: '',
-             tarea: ''
-            }))
-    }
-
    
     try {
         await db.connect();
@@ -118,6 +103,20 @@ const createAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
         if ( asistenciaInDB ) {
             await db.disconnect();
             return res.status(201).json( asistenciaInDB );
+        }
+
+        const data = {
+            fecha: fecha,
+            clima: '',
+            montaje: '',
+            observaciones: '',
+            asistenciaData: asistenciaData.map((obj: object ) => ({
+                 ...obj,
+                 ingreso: '',
+                 salida: '',
+                 estado: '',
+                 tarea: ''
+                }))
         }
         
         const asistencia = new Asistencia( data );
