@@ -44,7 +44,7 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
 
   console.log(data)
 
-  if ( !data )  return <AsistenciaDataGridLoading />
+  if ( !data )  { <AsistenciaDataGridLoading /> }
 
   const initialRows: GridRowsProp  = data.asistenciaData.map( (personal: Asistencia) => ({
     id: personal.legajo,
