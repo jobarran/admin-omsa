@@ -36,7 +36,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   const router = useRouter()
   const { activeObra } = useContext(UiContext)
   const [isMutating, setIsMutating] = useState(false)
-  const { data, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
+  const { data: dataAsistencia, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
   const { data: dataPersonal } = usePersonal(`/personal`)
   const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
 
@@ -67,6 +67,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   }
 
   const onGetOrCreateAsistencia = async () => {
+    
     const {data} = await adminObraApi.post(`/asistencia`, { 
       fecha: dayValue.format('YYYYMMDD').toString(),
       asistenciaData: dataPersonal,
@@ -130,7 +131,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
             />
 
             {
-              !!data && !isLoading 
+              !!dataAsistencia && !isLoading 
               ? 
               <AsistenciaWeatherCard
                 parte={parte}
@@ -145,10 +146,10 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              !!data && !isLoading
+              !!dataAsistencia && !isLoading
               ?
               <AsistenciaDataGrid
-                data={data}
+                data={dataAsistencia}
                 onUpdateRow={onUpdateAsistenciaById}
                 obraNames={obraNames}
                 onUpdatePersonal={onUpdatePersonalList}
