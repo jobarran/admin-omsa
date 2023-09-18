@@ -37,7 +37,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
   const { activeObra } = useContext(UiContext)
   const [isMutating, setIsMutating] = useState(false)
   const { data, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
-  const { data: dataPersonal } = usePersonal(`/personal`)
+  // const { data: dataPersonal } = usePersonal(`/personal`)
   const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
 
 
@@ -66,22 +66,22 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
     }))
   }
 
-  const onGetOrCreateAsistencia = async () => {
-    const {data} = await adminObraApi.post(`/asistencia`, { 
-      fecha: dayValue.format('YYYYMMDD').toString(),
-      asistenciaData: dataPersonal,
-      clima: parte.clima,
-      montaje: parte.montaje,
-      observaciones: parte.observaciones
-     });
+  // const onGetOrCreateAsistencia = async () => {
+  //   const {data} = await adminObraApi.post(`/asistencia`, { 
+  //     fecha: dayValue.format('YYYYMMDD').toString(),
+  //     asistenciaData: dataPersonal,
+  //     clima: parte.clima,
+  //     montaje: parte.montaje,
+  //     observaciones: parte.observaciones
+  //    });
 
-    setParte({
-      clima: data.clima,
-      montaje: data.montaje,
-      observaciones: data.observaciones
-    })
+  //   setParte({
+  //     clima: data.clima,
+  //     montaje: data.montaje,
+  //     observaciones: data.observaciones
+  //   })
 
-  }
+  // }
 
   const onUpdateAsistenciaById = async (rows: any) => {
 
@@ -101,7 +101,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
 
     await adminObraApi.put(`/asistencia`, {
       fecha: dayValue.format('YYYYMMDD').toString(),
-      data: dataPersonal
+      // data: dataPersonal
     })
   }
 
