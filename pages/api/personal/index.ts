@@ -31,15 +31,21 @@ export default async function handler(
 
 const getPersonal = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
-    await db.connect();
+    try {
 
-    const personal = await Personal.find()
-                                   .select('estado categoria lastName name legajo obra')
-                                   .lean();
-
-    await db.disconnect();
-
-    return res.status(200).json( personal );
+        await db.connect();
+        const personal = await Personal.find()
+                                       .select('estado categoria lastName name legajo obra')
+                                       .lean();
+    
+        await db.disconnect();
+        return res.status(200).json( personal );
+        
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar logs del servidor' });
+    }
 
 }
 

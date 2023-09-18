@@ -13,8 +13,8 @@ type Data =
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     
     switch (req.method) {
-        case 'GET':
-            return getAsistencia( req, res );
+        // case 'GET':
+        //     return getAsistencia( req, res );
             
         case 'PUT':
             return updateAsistencia( req, res );
@@ -29,16 +29,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
  
 }
 
-const getAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
+// const getAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     
-    await db.connect();
+//     await db.connect();
 
 
 
-    await db.disconnect();
+//     await db.disconnect();
 
-}
+// }
 
 
 const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
