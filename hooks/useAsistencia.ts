@@ -9,8 +9,10 @@ export const useAsistencia = (url: string, config: SWRConfiguration = {} ) => {
 
     const { data, error, isLoading, mutate } = useSWR<IAsistencia[]>(
         `/api/${ url }`,
-        fetcher
-    )
+        fetcher, {
+            revalidateOnFocus: false,
+        }
+    );
 
     return {
         data: data || [],

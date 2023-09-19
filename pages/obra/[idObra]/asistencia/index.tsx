@@ -28,21 +28,24 @@ interface Props {
       idObra: string,
       name  : string
     }[],
+    asistencia: any
 }
 
-export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => {
+export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames, asistencia }) => {
 
   const [dayValue, setDayValue] = useState<Dayjs>(dayjs());
   const router = useRouter()
   const { activeObra } = useContext(UiContext)
   const [isMutating, setIsMutating] = useState(false)
-  const { data: dataAsistencia, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
+  // const { data: dataAsistencia, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
   const { data: dataPersonal } = usePersonal(`/personal`)
+  const [dataToGrid, setDataToGrid] = useState(asistencia)
   const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
 
-  useEffect(() => {
-    mutate()
-  }, [isMutating===true])
+
+  // useEffect(() => {
+  //   mutate()
+  // }, [isMutating===true])
 
   const breadcrumbsRef = [
     { key: 'obra', name: activeObra?.name, link: `/obra/${activeObra?.idObra}` },
@@ -64,6 +67,8 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
       montaje: data.montaje,
       observaciones: data.observaciones
     })
+
+    setDataToGrid(data)
 
   }
 
@@ -100,7 +105,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
 
     await adminObraApi.put(`/asistencia`, {
       fecha: dayValue.format('YYYYMMDD').toString(),
-      data: isLoading ? dataPersonal : []
+      data: dataToGrid
     })
   }
 
@@ -129,7 +134,7 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
             />
 
             {
-              !!dataAsistencia && !isLoading 
+              !!dataToGrid  
               ? 
               <AsistenciaWeatherCard
                 parte={parte}
@@ -144,10 +149,10 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames }) => 
           <Grid container item spacing={2} xs={12} lg={9}>
 
             {
-              dataAsistencia && !isLoading
+              dataToGrid
               ?
               <AsistenciaDataGrid
-                data={dataAsistencia}
+                data={dataToGrid}
                 onUpdateRow={onUpdateAsistenciaById}
                 obraNames={obraNames}
                 onUpdatePersonal={onUpdatePersonalList}
@@ -171,12 +176,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const obraNames = await dbObras.getAllObras();
   const personal = await dbPersonal.getAllPersonal()
-  await dbAsistencia.getOrCreateAsistencia(personal)
+  const asistencia = await dbAsistencia.getOrCreateAsistencia(personal)
+
 
   return {
       props: { 
         obraNames: obraNames,
         personal: personal,
+        asistencia: asistencia
        }
   }
 }
