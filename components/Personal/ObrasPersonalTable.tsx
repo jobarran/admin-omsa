@@ -90,7 +90,7 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             field: 'name',
             headerName: 'Nombre',
             flex: 1,
-            minWidth: 200,
+            minWidth: 170,
             editable: false,
         },
         {
@@ -180,7 +180,7 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
                     />
 
                     <Button 
-                    sx={{mt:0.5, ml:0.5, display:{xs:'none', md:'flex'}}}
+                    sx={{mt:0.5, ml:0.5 }}
                     onClick={handleOpenModal}
                     >
                         Agregar
