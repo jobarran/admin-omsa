@@ -232,6 +232,7 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
 
                 <DotMenu
                   handleAutoFill={ handleAutoFill }
+                  handleUpdatePersonal={handleUpdatePersonal}
                   handleSaveData={ onSaveData }
                 />                
  

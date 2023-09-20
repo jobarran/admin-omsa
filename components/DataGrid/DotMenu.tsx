@@ -4,10 +4,11 @@ import { FC, useState } from "react";
 
 interface Props {
     handleAutoFill: () => void,
-    handleSaveData: () => void
+    handleSaveData: () => void,
+    handleUpdatePersonal: () => void
 }
 
-export const DotMenu:FC<Props> = ({handleAutoFill, handleSaveData}) => {
+export const DotMenu:FC<Props> = ({handleAutoFill, handleSaveData, handleUpdatePersonal}) => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMenu = Boolean(anchorEl);
@@ -28,7 +29,7 @@ export const DotMenu:FC<Props> = ({handleAutoFill, handleSaveData}) => {
             handleAutoFill()
             break;
         case 'actualizarPersonal':
-            
+            handleUpdatePersonal()
             break;
         
         default:
