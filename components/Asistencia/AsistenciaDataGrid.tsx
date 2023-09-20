@@ -11,14 +11,13 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { QuickSearch } from '../DataGrid';
 import { DotMenu } from '../DataGrid';
 import { AsistenciaDataGridLoading } from '.';
+import { useRouter } from 'next/router';
 
 interface Props {
   data: any
   onUpdateRow: any,
   obraNames: any,
   onUpdatePersonal: any,
-  setIsMutating: any,
-  isMutating: boolean
 }
 
 const MOBILE_COLUMNS = {
@@ -40,7 +39,7 @@ const ALL_COLUMNS = {
   tarea: true,
 };
 
-export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUpdatePersonal, setIsMutating, isMutating}) => {
+export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUpdatePersonal}) => {
 
   const initialRows: GridRowsProp  = data.asistenciaData.map( (personal: Asistencia) => ({
     id: personal.legajo,
@@ -53,7 +52,6 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
   }))
 
   const [rows, setRows] = useState(initialRows);
-  const { activeObra } = useContext( UiContext ) 
   const apiRef = useGridApiRef();
   const [open, setOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([])
@@ -61,7 +59,8 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const [columnVisible, setColumnVisible] = React.useState(ALL_COLUMNS);
-  
+  const router = useRouter()
+    
   useEffect(() => {
       const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
       setColumnVisible(newColumns);
@@ -69,13 +68,7 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
 
   useEffect(() => {
     setRows(initialRows)
-  }, [data])
-  
-
-  useEffect(() => {
-    setRows(initialRows)
-  }, [isMutating===true])
-  
+  }, [data]) 
 
   useEffect(() => {
     apiRef.current.setQuickFilterValues(searchBox)
@@ -137,10 +130,6 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
 
   const handleUpdatePersonal = () => {
     onUpdatePersonal()
-    setIsMutating(true)
-    setTimeout(() => {
-      setIsMutating(false)
-    }, 1000);
   }
 
   const columns: GridColDef[] = [
@@ -290,7 +279,7 @@ export const AsistenciaDataGrid:FC<Props> = ({data, onUpdateRow, obraNames, onUp
             initialState={{
               filter: {
                 filterModel: {
-                  items: [{ field: 'obra', operator: 'is', value: activeObra?.idObra }],
+                  items: [{ field: 'obra', operator: 'is', value: router.query.idObra }],
                 },
               },
               sorting: {

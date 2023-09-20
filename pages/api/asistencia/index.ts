@@ -54,7 +54,8 @@ const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
     
     const { fecha = '', data = '' } = req.body as { fecha: string, data: any };
 
-
+    console.log(data)
+    
     await db.connect();
     const asistencia: any = await Asistencia.findOne({ fecha : fecha ? fecha : '' }).lean()
     
@@ -82,6 +83,8 @@ const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
             });
         }
     }
+
+    console.log(updatedAsistenciaByDate)
 
     const updatedAsistencia: IAsistencia | null = await Asistencia.findOneAndUpdate(
         { fecha : fecha },

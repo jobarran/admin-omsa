@@ -1,17 +1,16 @@
 import { GetServerSideProps, NextPage } from "next"
 
-import { Card, Grid, Skeleton, makeStyles } from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 
 import { ObraLayout } from "@/components/layouts"
 import { dbAsistencia, dbObras, dbPersonal } from "@/database"
-import { IObra } from "@/interfaces"
 import { useContext, useEffect, useState } from "react";
 import { CustomBreadCrumbs } from '@/components/ui';
 import dayjs, { Dayjs } from "dayjs";
 import { AsistenciaDataGridLoading, AsistenciaDateCard, AsistenciaWeatherLoadingCard } from "@/components/Asistencia";
 import { AsistenciaDataGrid } from "../../../../components/Asistencia";
 import { adminObraApi } from "@/api";
-import { useAsistencia, usePersonal } from "@/hooks";
+import { usePersonal } from "@/hooks";
 import { AsistenciaWeatherCard } from '../../../../components/Asistencia/AsistenciaWeatherCard';
 import { UiContext } from "@/context";
 import { useRouter } from "next/router";
@@ -34,18 +33,12 @@ interface Props {
 export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames, asistencia }) => {
 
   const [dayValue, setDayValue] = useState<Dayjs>(dayjs());
-  const router = useRouter()
   const { activeObra } = useContext(UiContext)
   const [isMutating, setIsMutating] = useState(false)
   // const { data: dataAsistencia, error, isLoading, mutate } = useAsistencia(`/asistencia/${dayValue.format('YYYYMMDD').toString()}`)
   const { data: dataPersonal } = usePersonal(`/personal`)
   const [dataToGrid, setDataToGrid] = useState(asistencia)
-  const [parte, setParte] = useState({ clima: '', montaje: '', observaciones: ''})
-
-
-  // useEffect(() => {
-  //   mutate()
-  // }, [isMutating===true])
+  const [parte, setParte] = useState({ clima: asistencia.clima , montaje: asistencia.montaje , observaciones: asistencia.observaciones })
 
   const breadcrumbsRef = [
     { key: 'obra', name: activeObra?.name, link: `/obra/${activeObra?.idObra}` },
@@ -103,10 +96,12 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames, asist
 
   const onUpdatePersonalList = async () => {
 
-    await adminObraApi.put(`/asistencia`, {
+    const updatePersonal = await adminObraApi.put(`/asistencia`, {
       fecha: dayValue.format('YYYYMMDD').toString(),
-      data: dataToGrid
+      data: dataPersonal
     })
+
+    setDataToGrid(updatePersonal.data)
   }
 
   return (
@@ -156,8 +151,6 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames, asist
                 onUpdateRow={onUpdateAsistenciaById}
                 obraNames={obraNames}
                 onUpdatePersonal={onUpdatePersonalList}
-                setIsMutating={setIsMutating}
-                isMutating={isMutating}
               />   
               : <AsistenciaDataGridLoading />
             }
