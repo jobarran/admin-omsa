@@ -11,6 +11,8 @@ import { usePersonal } from "@/hooks";
 import { ObraPersonalTable, ObraPersonalTableLoading } from "@/components/Personal";
 import React from "react";
 import { UiContext } from "@/context";
+import { personalInObra } from '../../../../utils/personalInObra';
+import { personalInObraByRol } from "@/utils";
 
 
 
@@ -75,28 +77,37 @@ export const ObraPersonalPage: NextPage<Props> = ({ obra, obraNames }) => {
                         <Box></Box>
 
                         <Box>
-                          <Typography color='primary' variant="h4">28</Typography>
+                          <Typography color='primary' variant="h4">
+                            {personalInObra(activeObra?.idObra, data)}</Typography>
                           <Typography color='primary' variant="body2">Total</Typography>
                         </Box>
 
                         <Divider sx={{ m:1 }} orientation="vertical" flexItem />
 
                         <Box>
-                          <Typography variant="h4">1</Typography>
+                          <Typography variant="h4">
+                            {personalInObraByRol(activeObra?.idObra, data, 'Capataz')}
+                          </Typography>
                           <Typography variant="body2">Capataz</Typography>
                         </Box>
 
                         <Divider sx={{ m:1 }}  orientation="vertical" flexItem />
 
                         <Box>
-                          <Typography variant="h4">1</Typography>
+                          <Typography variant="h4">{personalInObraByRol(activeObra?.idObra, data, 'HyS')}</Typography>
                           <Typography variant="body2">HyS</Typography>
                         </Box>
 
                         <Divider sx={{ m:1 }}  orientation="vertical" flexItem />
 
                         <Box>
-                          <Typography variant="h4">26</Typography>
+                          <Typography variant="h4">
+                            {
+                              personalInObra(activeObra?.idObra, data)
+                              -personalInObraByRol(activeObra?.idObra, data, 'Capataz')
+                              -personalInObraByRol(activeObra?.idObra, data, 'HyS')
+                            }
+                          </Typography>
                           <Typography variant="body2">Operarios</Typography>
                         </Box>
 

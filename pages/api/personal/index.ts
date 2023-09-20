@@ -35,7 +35,7 @@ const getPersonal = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
         await db.connect();
         const personal = await Personal.find()
-                                       .select('estado categoria lastName name legajo obra')
+                                       .select('estado categoria lastName name legajo obra alta')
                                        .lean();
     
         await db.disconnect();

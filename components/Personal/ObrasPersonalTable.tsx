@@ -11,6 +11,8 @@ import StepLabel from '@mui/material/StepLabel';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { QuickSearch } from '../DataGrid';
 import { PersonalAddModal } from '.';
+import dayjs from 'dayjs';
+import { getYearsBetweenDates } from '@/utils';
 
 interface Props {
     data: IPersonal[],
@@ -49,6 +51,10 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
         id: operario.legajo,
         name: operario.lastName + ' ' + operario.name,
         obra: operario.obra,
+        category: operario.categoria,
+        asistencia: '30%',
+        valoracion: '8/10',
+        antiguedad: `${getYearsBetweenDates(operario.alta, dayjs().format('DD/MM/YYYY'))}`
     }))
 
     const apiRef = useGridApiRef();
@@ -98,7 +104,7 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             headerName: 'Obra',
             flex: 1,
             minWidth: 60,
-            maxWidth: 200,
+            maxWidth: 150,
             editable: false,
         },
         {
@@ -114,24 +120,27 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             headerName: 'Asistencia',
             flex: 1,
             minWidth: 50,
-            maxWidth: 200,
+            maxWidth: 100,
             editable: false,
+            align: 'center'
         },
         {
             field: 'valoracion',
             headerName: 'Valoracion',
             flex: 1,
             minWidth: 50,
-            maxWidth: 200,
+            maxWidth: 100,
             editable: false,
+            align: 'center'
         },
         {
             field: 'antiguedad',
             headerName: 'Antiguedad',
             flex: 1,
             minWidth: 50,
-            maxWidth: 200,
+            maxWidth: 100,
             editable: false,
+            align: 'center'
         },
         // {
         //     field: 'actions',

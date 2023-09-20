@@ -5,5 +5,6 @@ export const categorias = [
     'medio oficial',
     'oficial',
     'oficial especializado',
-    'capataz'
+    'capataz',
+    'HyS'
 ]

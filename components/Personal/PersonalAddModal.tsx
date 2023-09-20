@@ -135,7 +135,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
 
                         <Grid container sx={{ padding:'10px 0px 5px 15px' }} spacing={2}>
 
-                            <Grid item xs={3}>
+                            <Grid item xs={12} sm={3}>
                                 <TextField
                                     size='small'
                                     label="Nombre"
@@ -149,7 +149,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     helperText={ errors.name?.message }
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} sm={4}>
                                 <TextField
                                     size='small'
                                     label="Apellido"
@@ -163,7 +163,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     helperText={ errors.lastName?.message }
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={6} sm={2}>
                                 <TextField
                                     size='small'
                                     label="Legajo"
@@ -177,7 +177,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     helperText={ errors.legajo?.message }
                                 />
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={6} sm={3}>
                                 <LocalizationProvider 
                                     dateAdapter={AdapterDayjs}
                                     adapterLocale='es'
@@ -199,30 +199,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     />
                                 </LocalizationProvider>
                             </Grid>
-                            <Grid item xs={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Obra</InputLabel>
-                                    <Select
-                                        size='medium'
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="Obra"
-                                        defaultValue=""
-                                        { ...register('obra', {
-                                            required: 'Este campo es requerido',
-                                        })}
-                                        error={ !!errors.obra }
-                                    >
-                                        {
-                                            obraNames.map( (obra:any) => 
-                                                <MenuItem key={obra.idObra} value={obra.idObra}>{obra.name}</MenuItem>
-                                            )
-                                        }
-                                    </Select>
-                                    <FormHelperText error>{ errors.obra ? errors.obra?.message : '' }</FormHelperText>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={5}>
+                            <Grid item xs={12} sm={5}>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">Categoría</InputLabel>
                                     <Select
@@ -245,7 +222,31 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     <FormHelperText error>{ errors.categoria ? errors.categoria?.message : '' }</FormHelperText>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={6} sm={4}>
+                                <FormControl fullWidth>
+                                    <InputLabel>Obra</InputLabel>
+                                    <Select
+                                        size='medium'
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="Obra"
+                                        defaultValue=""
+                                        { ...register('obra', {
+                                            required: 'Este campo es requerido',
+                                        })}
+                                        error={ !!errors.obra }
+                                    >
+                                        {
+                                            obraNames.map( (obra:any) => 
+                                                <MenuItem key={obra.idObra} value={obra.idObra}>{obra.name}</MenuItem>
+                                            )
+                                        }
+                                    </Select>
+                                    <FormHelperText error>{ errors.obra ? errors.obra?.message : '' }</FormHelperText>
+                                </FormControl>
+                            </Grid>
+                            
+                            <Grid item xs={6} sm={3}>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                                     <Select
@@ -274,7 +275,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
 
                         <Grid container sx={{ padding:'5px 0px 5px 15px' }} spacing={2}>
 
-                                <Grid item xs={4}>
+                                <Grid item xs={12} sm={4}>
                                 <LocalizationProvider 
                                     dateAdapter={AdapterDayjs}
                                     adapterLocale='es'
@@ -296,7 +297,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                     />
                                 </LocalizationProvider>
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={6} sm={3}>
                                     <TextField
                                         size='small'
                                         label="Telefono"
@@ -305,7 +306,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                         { ...register('telefono') }
                                     />
                                 </Grid>
-                                <Grid item xs={5}>
+                                <Grid item xs={6} sm={3}>
                                     <TextField
                                         size='small'
                                         label="Dirección"
@@ -337,7 +338,7 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                         <Grid  container sx={{ padding:'5px 0px 5px 15px' }} spacing={2}>
 
 
-                            <Grid item  xs={11}>
+                            <Grid item  xs={10} sm={11}>
 
                             <Autocomplete
                                 disablePortal
@@ -350,20 +351,6 @@ export const PersonalAddModal:FC<Props> = ({ openModal, setOpenModal, obraNames,
                                 renderInput={(params) => <TextField {...params} label="Aptitud" />}
                                 size='small'
                             />
-
-
-
-{/* 
-                                <TextField
-                                    fullWidth
-                                    size='small'
-                                    label="Agregar aptitud"
-                                    variant="outlined"
-                                    value={aptitud}
-                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                        setAptitud(event.target.value);
-                                    }}
-                                /> */}
                             </Grid>
                             <Grid item  xs={1}>
                                 <IconButton
