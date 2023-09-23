@@ -2,23 +2,34 @@
 import { Avatar, Card, CardContent, CardHeader, Divider, Grid, Skeleton } from '@mui/material';
 
 import { ObraLayout } from "@/components/layouts"
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CustomBreadCrumbs } from '@/components/ui';
 import { UiContext } from "@/context";
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined';
 import { OmDataGrid } from "@/components/Om";
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import { dbObras, dbOm } from '@/database';
+import { IObra, IOm } from '@/interfaces';
+import { useOm } from '@/hooks';
 
 
+interface Props {
+  obra: IObra,
+}
 
-const ObraOmPage: NextPage = () => {
+const ObraOmPage: NextPage<Props> = ({obra}) => {
 
   const { activeObra } = useContext(UiContext)
+  const [isMutating, setIsMutating] = useState(false)
+  const { data, error, isLoading, mutate } = useOm(`/om?idObra=${obra.idObra}`)
+
+
+  useEffect(() => {
+    mutate()
+  }, [isMutating])
 
 
   const breadcrumbsRef = [
-    { key: 'obra', name: activeObra?.name, link: `/obra/${activeObra?.idObra}` },
+    { key: 'obra', name: obra.name, link: `/obra/${obra.idObra}` },
   ] 
 
   
@@ -30,25 +41,36 @@ const ObraOmPage: NextPage = () => {
         title={`${ activeObra?.name + ' - Asistencia' }`}
         pageDescription={"Asistencia"}
       >
-        {
-          !!activeObra
-          ? <CustomBreadCrumbs references={ breadcrumbsRef }/>
-          : <Skeleton animation="wave" variant="rounded" width={250} height={25} sx={{  bgcolor: 'grey.100', mt:2, mb:2 }}/>
-        }
-
-        
+      
+          <CustomBreadCrumbs references={ breadcrumbsRef }/>       
 
         <Grid container spacing={2}>
           
-            <OmDataGrid
-            data={[ 'asd0', 'dasdas']}
-          />
+          {
+            data && !isLoading
+            ? <OmDataGrid data={data} obra={obra} setIsMutating={setIsMutating} />
+            : <></>
+          }
 
         </Grid>
 
       </ObraLayout>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+    
+  const { idObra } = params as { idObra: string }
+
+  const obra = await dbObras.getObrasById( idObra.toString() );
+
+
+  return {
+      props: { 
+        obra: obra,
+       }
+  }
 }
 
 export default ObraOmPage

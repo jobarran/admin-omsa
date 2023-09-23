@@ -1,48 +1,70 @@
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
-import { Alert, Avatar, Box, Button, Card, CardHeader, Divider, Grid, Snackbar, Tooltip, useMediaQuery, useTheme } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowsProp, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
+import { Avatar, Box, Button, Card, CardHeader, Divider, Grid, Tooltip, useMediaQuery, useTheme, Typography, capitalize } from '@mui/material';
+import { DataGrid, GridActionsCellItem, GridColDef, GridRenderCellParams, GridRowsProp, useGridApiRef } from '@mui/x-data-grid'
 
-import { UiContext } from '@/context'
-import { horarios, tareas } from '@/config'
-import { Asistencia } from '@/interfaces'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 import { QuickSearch } from '../DataGrid';
-import { DotMenu } from '../DataGrid';
-import { useRouter } from 'next/router';
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined';
 import CallReceivedOutlinedIcon from '@mui/icons-material/CallReceivedOutlined';
 import CallMadeOutlinedIcon from '@mui/icons-material/CallMadeOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CircleIcon from '@mui/icons-material/Circle';
+import { capitalizeAndSpaceInit, statusColor } from '@/utils';
+import { OmAddModal } from '.';
 
 interface Props {
-  data: any
+  data: any,
+  obra: any,
+  setIsMutating: any
 }
 
-export const OmDataGrid:FC<Props> = ({data}) => {
+const MOBILE_COLUMNS = {
+  id         : true,
+  revision   : false,
+  floor      : false,
+  sector     : false,
+  description: false,
+  status     : true,
+  element    : true
+};
+const ALL_COLUMNS = {
+  id         : true,
+  revision   : true,
+  floor      : true,
+  sector     : true,
+  description: true,
+  status     : true,
+  element    : true
+};
+
+export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
 
   const initialRows: GridRowsProp  = data.map( (om: any) => ({
-    id         : om,
-    revision   : 2,
-    floor      : 2,
-    sector     : '',
-    description: '',
-    status     : '',
-    element    : []
+    id         : om.name,
+    revision   : om.revision,
+    floor      : om.floor,
+    sector     : om.sector,
+    description: om.description,
+    status     : om.status,
   }))
 
   const [rows, setRows] = useState(initialRows);
   const apiRef = useGridApiRef();
-  const [open, setOpen] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<any[]>([])
   const [searchBox, setSearchBox] = useState<any[]>([])
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const router = useRouter()
+  const [columnVisible, setColumnVisible] = useState(ALL_COLUMNS);
+  const [openModal, setOpenModal] = useState(false);
+
+
+  useEffect(() => {
+      const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
+      setColumnVisible(newColumns);
+  }, [matches]);
     
 
   useEffect(() => {
@@ -63,7 +85,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
           headerName: 'Nombre',
           editable: false,
           flex: 1,
-          minWidth: 80,
+          minWidth: 120,
           maxWidth: 150,
       },
       {
@@ -103,18 +125,29 @@ export const OmDataGrid:FC<Props> = ({data}) => {
           headerName: 'Estado',
           flex: 1,
           minWidth: 60,
-          maxWidth: 100,
-          editable: true,
-          type: 'singleSelect',
-          valueOptions: ['Presente', 'Ausente', 'ART', 'Vacaciones'],
+          maxWidth: matches ? 100 : 60,
+          renderCell: (params: GridRenderCellParams) => (
+            <>
+              <Tooltip title={ params.value === '-' ? '' : params.value} arrow>
+                <CircleIcon fontSize='small' color={ statusColor(params.value) } />
+              </Tooltip>
+              <Typography
+                variant='body2'
+                sx={{ display:{xs:'none', sm:'flex'}, ml:1}}
+              >
+                { capitalize(params.value) === '-' ? '' : capitalize(params.value) }
+              </Typography>
+            </>
+
+
+          )      
       },
       {
           field: 'actions',
           headerName: 'Acciones',
           type: 'actions',
           flex: 1,
-          minWidth: 200,
-          maxWidth: 300,
+          minWidth: matches ? 220 : 50,
           editable: false,
           getActions: (params: any) => [
               <GridActionsCellItem
@@ -126,6 +159,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Elementos"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
                 key={params.id}
@@ -136,6 +170,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Ingeniería"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
                 key={params.id}
@@ -146,6 +181,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Pedir"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
                 key={params.id}
@@ -156,6 +192,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Recibir"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
                 key={params.id}
@@ -166,6 +203,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Editar"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
                 key={params.id}
@@ -176,10 +214,15 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 }
                 label="Eliminar"
                 onClick={() => {} }
+                showInMenu={ matches ? false : true }
               />,
           ],
       },
     ];
+
+    const handleOpenModal = () => {
+      setOpenModal(true);
+  };
   
   return (
 
@@ -189,7 +232,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
         <CardHeader
             avatar={
               <Avatar>
-                <PeopleAltOutlinedIcon/>
+                <ContentPasteOutlinedIcon/>
               </Avatar>
             }
             action={
@@ -202,16 +245,22 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 />            
  
                 <Button 
-                  sx={{mt:0.5, ml:0.5, display:{xs:'none', md:'flex'}}}
-                  onClick={()=>{}}
+                  sx={{mt:0.5, ml:0.5}}
+                  onClick={handleOpenModal}
                 >
-                  Guardar
+                  Nueva OM
                 </Button>
               </Box>
             }
             title='Orden de Montaje'
         />
-      
+
+        <OmAddModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            setIsMutating={setIsMutating}
+            idObra={obra.idObra}
+        />
 
         <Divider/>
 
@@ -220,6 +269,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
             rows={rows}
             columns={columns}
             // rowHeight={35}
+            columnVisibilityModel={columnVisible}
             hideFooterSelectedRowCount
             hideFooterPagination
             autoHeight={true}
@@ -241,3 +291,4 @@ export const OmDataGrid:FC<Props> = ({data}) => {
     </Grid>
   )
 }
+

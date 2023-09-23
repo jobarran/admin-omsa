@@ -177,7 +177,7 @@ export const initialData: SeedData = {
             floor      : 1,
             sector     : 'Torre',
             description: 'Colocación de pista de arranque en Piso 1',
-            status     : '-',
+            status     : 'pedido',
             element    : [
                 {
                     quantity   : 50,
@@ -212,7 +212,7 @@ export const initialData: SeedData = {
             floor      : 2,
             sector     : 'Torre',
             description: 'Colocación de anclajes en Piso 2',
-            status     : '-',
+            status     : 'recibido',
             element    : [
                 {
                     quantity   : 50,
@@ -247,6 +247,35 @@ export const initialData: SeedData = {
             floor      : 1,
             sector     : 'Torre',
             description: 'Colocación de modulos en Piso 1',
+            status     : 'parcial',
+            element    : [
+                {
+                    quantity   : 10,
+                    code       : 'M001',
+                    description: 'Modulo',
+                    received   : 0
+                },
+                {
+                    quantity   : 5,
+                    code       : 'M002',
+                    description: 'Modulo',
+                    received   : 0
+                },
+                {
+                    quantity   : 10,
+                    code       : 'P01',
+                    description: 'Splice',
+                    received   : 0
+                },
+            ]
+        },
+        {
+            idObra     : '1371',
+            name       : 'OM-1371-004',
+            revision   : 3,
+            floor      : 2,
+            sector     : 'Torre',
+            description: 'Colocación de modulos en Piso 2',
             status     : '-',
             element    : [
                 {

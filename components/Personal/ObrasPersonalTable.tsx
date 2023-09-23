@@ -80,7 +80,6 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
 
     const editUser = 
         (id: GridRowId) => () => {
-            console.log(id)
         router.push(`/personal/${id}`)
     }
     
@@ -153,12 +152,7 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             editable: false,
             getActions: (params: any) => [
                 <GridActionsCellItem
-                    icon={
-                        <OpenInNewOutlinedIcon
-                            key={params.id}
-                            sx={{ color:theme.palette.primary.main }}
-                        />
-                    }
+                    icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
                     label="Open"
                     key={params.id}
                     onClick={ editUser(params.id) }
