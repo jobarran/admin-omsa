@@ -154,6 +154,7 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
                 <GridActionsCellItem
                     icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
                     label="Open"
+                    key={params.id}
                     onClick={ editUser(params.id) }
                 />,
             ],
