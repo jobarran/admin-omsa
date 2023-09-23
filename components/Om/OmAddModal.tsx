@@ -99,7 +99,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
             const submitted = await adminObraApi.post(`/om`, {
                 ...data,
                 idObra     : idObra,
-                name       : 'OM-'+ idObra + data.name,
+                name       : 'OM-'+ idObra + '-' + data.name,
                 revision   : data.revision,
                 floor      : data.floor,
                 sector     : data.sector,
