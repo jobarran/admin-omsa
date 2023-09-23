@@ -118,6 +118,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
           editable: false,
           getActions: (params: any) => [
               <GridActionsCellItem
+                key={params.id}
                 icon={
                   <Tooltip title="Elementos" arrow>
                     <ContentPasteOutlinedIcon sx={{ color:theme.palette.primary.main }} />
@@ -127,6 +128,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 onClick={() => {} }
               />,
               <GridActionsCellItem
+                key={params.id}
                 icon={
                   <Tooltip title="Ingeniería" arrow>
                     <FolderOutlinedIcon sx={{ color:theme.palette.primary.main }} />
@@ -136,6 +138,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 onClick={() => {} }
               />,
               <GridActionsCellItem
+                key={params.id}
                 icon={
                   <Tooltip title="Pedir" arrow>
                     <CallMadeOutlinedIcon sx={{ color:theme.palette.primary.main }} />
@@ -145,6 +148,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 onClick={() => {} }
               />,
               <GridActionsCellItem
+                key={params.id}
                 icon={
                   <Tooltip title="Recibir" arrow>
                     <CallReceivedOutlinedIcon sx={{ color:theme.palette.primary.main }} />
@@ -154,6 +158,7 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 onClick={() => {} }
               />,
               <GridActionsCellItem
+                key={params.id}
                 icon={
                   <Tooltip title="Editar" arrow>
                     <EditOutlinedIcon sx={{ color:theme.palette.primary.main }} />
@@ -163,14 +168,15 @@ export const OmDataGrid:FC<Props> = ({data}) => {
                 onClick={() => {} }
               />,
               <GridActionsCellItem
-              icon={
-                <Tooltip title="Eliminar" arrow>
-                  <DeleteOutlineIcon sx={{ color:theme.palette.error.main }} />
-                </Tooltip>
-              }
-              label="Eliminar"
-              onClick={() => {} }
-            />,
+                key={params.id}
+                icon={
+                  <Tooltip title="Eliminar" arrow>
+                    <DeleteOutlineIcon sx={{ color:theme.palette.error.main }} />
+                  </Tooltip>
+                }
+                label="Eliminar"
+                onClick={() => {} }
+              />,
           ],
       },
     ];
