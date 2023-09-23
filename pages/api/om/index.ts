@@ -1,14 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Personal } from '@/models';
-import { IPersonal,  } from '@/interfaces';
+import { IOm, IPersonal,  } from '@/interfaces';
 import { db } from '@/database';
 import Om from '@/models/Om';
 
 
 type Data = 
   | {message: string}
-  | IPersonal[]
+  | IOm[]
 
 
 export default async function handler(
