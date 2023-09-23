@@ -4,6 +4,7 @@ import { db, seeeDatabase } from '@/database';
 import { User, Obra, Personal } from '@/models';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
+import Om from '@/models/Om';
 
 type Data = {
   message: string
@@ -34,6 +35,9 @@ export default async function handler(
 
     await Personal.deleteMany();
     await Personal.insertMany( seeeDatabase.initialData.personal );
+
+    await Om.deleteMany();
+    await Om.insertMany( seeeDatabase.initialData.om );
   
     await db.connect();
     

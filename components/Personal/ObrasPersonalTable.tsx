@@ -142,22 +142,22 @@ export const ObraPersonalTable:FC<Props> = ({ data, obraNames, setIsMutating }) 
             editable: false,
             align: 'center'
         },
-        // {
-        //     field: 'actions',
-        //     headerName: 'Ver',
-        //     type: 'actions',
-        //     flex: 1,
-        //     minWidth: 50,
-        //     maxWidth: 100,
-        //     editable: false,
-        //     getActions: (params: any) => [
-        //         <GridActionsCellItem
-        //             icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
-        //             label="Open"
-        //             onClick={ editUser(params.id) }
-        //         />,
-        //     ],
-        // },
+        {
+            field: 'actions',
+            headerName: 'Ver',
+            type: 'actions',
+            flex: 1,
+            minWidth: 50,
+            maxWidth: 100,
+            editable: false,
+            getActions: (params: any) => [
+                <GridActionsCellItem
+                    icon={<OpenInNewOutlinedIcon sx={{ color:theme.palette.primary.main }} />}
+                    label="Open"
+                    onClick={ editUser(params.id) }
+                />,
+            ],
+        },
 
       ];
 

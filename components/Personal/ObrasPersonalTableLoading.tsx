@@ -76,7 +76,7 @@ export const ObraPersonalTableLoading = () => {
         field: 'name',
         headerName: 'Nombre',
         flex: 1,
-        minWidth: 200,
+        minWidth: 170,
           renderCell: () => {
             return <Skeleton variant="rounded" width='100%' height={10} sx={{  bgcolor: 'grey.100' }}/>;
           }
@@ -86,7 +86,7 @@ export const ObraPersonalTableLoading = () => {
         headerName: 'Obra',
         flex: 1,
         minWidth: 60,
-        maxWidth: 200,
+        maxWidth: 150,
           renderCell: () => {
             return <Skeleton variant="rounded" width='100%' height={10} sx={{  bgcolor: 'grey.100' }}/>;
           }
@@ -96,7 +96,7 @@ export const ObraPersonalTableLoading = () => {
         headerName: 'Categoría',
         flex: 1,
         minWidth: 50,
-        maxWidth: 200,
+        maxWidth: 100,
           renderCell: () => {
             return <Skeleton variant="rounded" width='100%' height={10} sx={{  bgcolor: 'grey.100' }}/>;
           }
@@ -106,7 +106,7 @@ export const ObraPersonalTableLoading = () => {
         headerName: 'Asistencia',
         flex: 1,
         minWidth: 50,
-        maxWidth: 200,
+        maxWidth: 100,
         renderCell: () => {
           return <Skeleton variant="rounded" width='100%' height={10} sx={{  bgcolor: 'grey.100' }}/>;
         }
@@ -116,7 +116,7 @@ export const ObraPersonalTableLoading = () => {
         headerName: 'Valoracion',
         flex: 1,
         minWidth: 50,
-        maxWidth: 200,
+        maxWidth: 100,
         renderCell: () => {
           return <Skeleton variant="rounded" width='100%' height={10} sx={{  bgcolor: 'grey.100' }}/>;
         }

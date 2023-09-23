@@ -5,9 +5,8 @@ import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
 import ContentPasteOutlinedIcon from '@mui/icons-material/ContentPasteOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 
 interface Props {
     name: string,
@@ -35,6 +34,11 @@ export const sideMenuObra: Props[] = [
         url: "/avance",
     },
     {
+        name: "OM",
+        avatar: ContentPasteOutlinedIcon,
+        url: "/om",
+    },
+    {
         name: "Personal",
         avatar: PersonOutlineOutlinedIcon,
         url: "/personal",
@@ -46,7 +50,7 @@ export const sideMenuObra: Props[] = [
     },
     {
         name: "Ingeniería",
-        avatar: ContentPasteOutlinedIcon,
+        avatar: FolderOutlinedIcon,
         url: "/ingenieria",
     },
     {
