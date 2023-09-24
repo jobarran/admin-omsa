@@ -5,7 +5,7 @@ import { ObraLayout } from "@/components/layouts"
 import { useContext, useEffect, useState } from "react";
 import { CustomBreadCrumbs } from '@/components/ui';
 import { UiContext } from "@/context";
-import { OmDataGrid } from "@/components/Om";
+import { OmDataGrid, OmDataGridLoading } from "@/components/Om";
 import { GetServerSideProps, NextPage } from 'next';
 import { dbObras, dbOm } from '@/database';
 import { IObra, IOm } from '@/interfaces';
@@ -49,7 +49,7 @@ const ObraOmPage: NextPage<Props> = ({obra}) => {
           {
             data && !isLoading
             ? <OmDataGrid data={data} obra={obra} setIsMutating={setIsMutating} />
-            : <></>
+            : <OmDataGridLoading />
           }
 
         </Grid>

@@ -31,13 +31,11 @@ export default async function handler(
 
 
 const getOm = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
-
     
     try {
 
         await db.connect();
         const om = await Om.find(req.query).lean();
-        console.log(om)
         await db.disconnect();
         return res.status(200).json( om );
         

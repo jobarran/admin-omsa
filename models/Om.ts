@@ -11,9 +11,9 @@ const omSubSchema = new Schema({
 const omSchema = new Schema({
     idObra     : { type: String, required: true },
     name       : { type: String, required: true },
-    revision   : {type: Number, required: true},
-    floor      : {type: Number, required: true},
-    sector     : {type: String, required: true},
+    revision   : { type: String, required: true},
+    floor      : { type: String, required: true},
+    sector     : { type: String, required: true},
     description: { type: String, required: true },
     status     : {
         type: String,

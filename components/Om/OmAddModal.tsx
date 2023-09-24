@@ -14,6 +14,9 @@ import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowsProp } fr
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { adminObraApi } from '@/api';
+import { omName } from '../../utils/omName';
+import { omRevision } from '../../utils/omRevision';
+import { OmAddModalTable } from '.';
 
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -45,52 +48,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
     const [description, setDescription] = useState('')
     const [codeError, setCodeError] = useState(false)
 
-    const columns: GridColDef[] = [
-        { 
-            field: 'code',
-            headerName: 'Código',
-            editable: false,
-            flex: 1,
-            minWidth: 120,
-            maxWidth: 150,
-        },
-        {
-            field: 'quantity',
-            headerName: 'Cantidad',
-            editable: false,
-            flex: 1,
-            minWidth: 50,
-            maxWidth: 70,
-        },
-        {
-            field: 'description',
-            headerName: 'Descripcion',
-            flex: 1,
-            minWidth: 200,
-            editable: true,
-        },
-        {
-            field: 'actions',
-            headerName: 'Eliminar',
-            type: 'actions',
-            flex: 1,
-            minWidth: 50,
-            maxWidth: 100,
-            editable: false,
-            getActions: (params: any) => [
-                <GridActionsCellItem
-                  key={params.id}
-                  icon={
-                    <Tooltip title="Eliminar" arrow>
-                      <DeleteOutlineIcon sx={{ color:'error' }} />
-                    </Tooltip>
-                  }
-                  label="Eliminar"
-                  onClick={handleDeleteElement(params.id)}
-                />,
-            ],
-        },
-      ];
+    
     
     const onSubmit: SubmitHandler<IOm> = async(data) => {
 
@@ -99,13 +57,13 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
             const submitted = await adminObraApi.post(`/om`, {
                 ...data,
                 idObra     : idObra,
-                name       : 'OM-'+ idObra + '-' + data.name,
-                revision   : data.revision,
+                name       : 'OM-'+ idObra + '-' + omName(data.name),
+                revision   : omRevision(data.revision),
                 floor      : data.floor,
                 sector     : data.sector,
                 description: data.description,
                 status     : '-',
-                elements: elementRows
+                element    : elementRows
 
             })
 
@@ -120,35 +78,23 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
             }
         } catch (error) {
             setShowError(true)
+            setTimeout(() => {
+                setShowError(false)
+            }, 3000);
         }
 
     }
     
     const handleClose = () => {
         setOpenModal(false);
+        reset()
+        setElementRows([])
+        setCode('')
+        setQuantity('')
+        setDescription('')
     };
 
-    const handleAddElement = () => {
-
-        const codeExists = elementRows.some(item => item.code === code)
-
-        if (!codeExists) {
-            setElementRows([
-                ...elementRows,
-                {code: code, quantity: quantity, description: description, received: 0}
-            ])
-            setCode('')
-            setQuantity('')
-            setDescription('')
-            setCodeError(false)
-          } else {
-            setCodeError(true)
-          }
-    }
-
-    const handleDeleteElement = (id: GridRowId) => () => {
-        setElementRows(elementRows.filter(item => item.code !== id))
-    }
+    
 
   return (
       
@@ -165,11 +111,11 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
 
                     <Grid item xs={12}>
                         <Chip 
-                            label="Ya existe un usuario con ese legajo"
+                            label="Ya tenemos una OM registrada con ese nombre"
                             color="error"
                             icon={ <ErrorOutline /> }
                             className="fadeIn"
-                            sx={{ display: showError ? 'flex': 'none' }}
+                            sx={{ display: showError ? 'flex': 'none', mb:2 }}
                         />
                     </Grid>
 
@@ -185,8 +131,8 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                     startAdornment: <InputAdornment position="start">{`OM-${idObra}-`}</InputAdornment>
                                   }}
                                 { ...register('name', {
-                                    required: 'Este campo es requerido',
-                                    minLength: { value: 2, message: 'Mínimo 2 caracteres' }
+                                    required: 'Debe indicar el nombre',
+                                    maxLength: 3
                                 })}
                                 error={ !!errors.name }
                                 helperText={ errors.name?.message }
@@ -198,9 +144,9 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 label="Revision"
                                 variant="outlined"
                                 fullWidth 
+                                inputProps={{ maxLength: 2 }}
                                 { ...register('revision', {
-                                    required: 'Este campo es requerido',
-                                    minLength: { value: 2, message: 'Mínimo 2 caracteres' }
+                                    required: 'Debe indicar la revisión',
                                 })}
                                 error={ !!errors.revision }
                                 helperText={ errors.revision?.message }
@@ -213,7 +159,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 variant="outlined"
                                 fullWidth 
                                 { ...register('floor', {
-                                    required: 'Este campo es requerido',
+                                    required: 'Debe indicar el Piso',
                                     
                                 })}
                                 error={ !!errors.floor }
@@ -227,7 +173,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 variant="outlined"
                                 fullWidth 
                                 { ...register('sector', {
-                                    required: 'Este campo es requerido',
+                                    required: 'Debe indicar el sector',
                                     
                                 })}
                                 error={ !!errors.sector }
@@ -241,7 +187,12 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 multiline
                                 variant="outlined"
                                 fullWidth 
-                                { ...register('description') }
+                                { ...register('description', {
+                                    required: 'Debe indicar la descripción',
+                                    
+                                })}
+                                error={ !!errors.description }
+                                helperText={ errors.description?.message }
                             />
                         </Grid>
 
@@ -251,71 +202,18 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                         <Divider>Elementos</Divider>
                     </Grid>
 
-                    <Grid container sx={{ padding:'10px 0px 5px 15px' }} spacing={2}>
-                        <Grid item xs={3} sx={{ mb:2}}>
-                            <TextField
-                                size='small'
-                                label="Código"
-                                variant="outlined"
-                                fullWidth 
-                                value={code}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    setCode(event.target.value);
-                                }}
-                                error={ codeError }
-                                helperText={ !codeError ? '' : 'Códdigo repetido' }
-                            />
-                        </Grid>
-                        <Grid item xs={2} sx={{ mb:2}}>
-                            <TextField
-                                size='small'
-                                label="Cantidad"
-                                variant="outlined"
-                                fullWidth
-                                value={quantity}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    setQuantity(event.target.value);
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={6} sx={{ mb:2}}>
-                            <TextField
-                                size='small'
-                                label="Descripción"
-                                variant="outlined"
-                                fullWidth 
-                                value={description}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    setDescription(event.target.value);
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={1} sx={{ mb:2}}>
-                            <IconButton
-                                onClick={handleAddElement}
-                            >
-                                <AddCircleOutlinedIcon color='primary'/>
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sx={{ mb:2}}>
-                        <DataGrid
-                            rows={elementRows}
-                            columns={columns}
-                            rowHeight={35}
-                            getRowId={(row) => row.code}
-                            // columnVisibilityModel={columnVisible}
-                            hideFooterSelectedRowCount
-                            hideFooterPagination
-                            autoHeight={true}
-                            disableRowSelectionOnClick
-                            sx={{
-                            border: 0,
-                            }}
-                        />
-                    </Grid>
-
+                    <OmAddModalTable
+                        elementRows={elementRows}
+                        setElementRows={setElementRows}
+                        code={code}
+                        setCode={setCode}
+                        quantity={quantity}
+                        setQuantity={setQuantity}
+                        description={description}
+                        setDescription={setDescription}
+                        codeError={codeError}
+                        setCodeError={setCodeError}
+                    />
 
                     </Grid>
                         

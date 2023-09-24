@@ -27,7 +27,7 @@ const MOBILE_COLUMNS = {
   revision   : false,
   floor      : false,
   sector     : false,
-  description: false,
+  description: true,
   status     : true,
   element    : true
 };
@@ -85,7 +85,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           headerName: 'Nombre',
           editable: false,
           flex: 1,
-          minWidth: 120,
+          minWidth: 100,
           maxWidth: 150,
       },
       {
@@ -94,22 +94,21 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           editable: false,
           flex: 1,
           minWidth: 50,
-          maxWidth: 50,
+          maxWidth: 70,
       },
       {
           field: 'description',
           headerName: 'Descripcion',
           flex: 1,
           minWidth: 150,
-          maxWidth: 500,
-          editable: true,
+          editable: false,
       },
       {
           field: 'floor',
           headerName: 'Piso',
           flex: 1,
-          minWidth: 60,
-          maxWidth: 200,
+          minWidth: 40,
+          maxWidth: 100,
           editable: false,
       },
       {
@@ -124,8 +123,8 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           field: 'status',
           headerName: 'Estado',
           flex: 1,
-          minWidth: 60,
-          maxWidth: matches ? 100 : 60,
+          minWidth: 20,
+          maxWidth: matches ? 80 : 60,
           renderCell: (params: GridRenderCellParams) => (
             <>
               <Tooltip title={ params.value === '-' ? '' : params.value} arrow>
@@ -148,6 +147,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           type: 'actions',
           flex: 1,
           minWidth: matches ? 220 : 50,
+          maxWidth: 220,
           editable: false,
           getActions: (params: any) => [
               <GridActionsCellItem
