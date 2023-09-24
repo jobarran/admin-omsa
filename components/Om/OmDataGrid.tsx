@@ -73,6 +73,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
 
   useEffect(() => {
     setRows(initialRows)
+    setOmData(undefined)
   }, [data]) 
 
   useEffect(() => {
@@ -219,7 +220,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
                 label="Eliminar"
                 onClick={()=>handleOpenDeleteDialog(params.id)}
                 showInMenu={ matches ? false : true }
-              />,
+              />
           ],
       },
     ];
@@ -237,26 +238,6 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
       setOmData(
         data.find((om:any) => om.name === id)
       )
-    }
-
-    const handleEditOm = async() => {
-      try {
-        const submitted = await adminObraApi.put(`/om`, {
-          data: {
-            id: omData ? omData.name : '',
-            data: omData
-          }
-        })
-        if (submitted.statusText === 'OK') {
-          setOpenDeleteConfirmationDialog({status:false, id:''})
-          setIsMutating(true)
-          setTimeout(() => {
-              setIsMutating(false)
-          }, 1000);
-        }        
-      } catch (error) {
-        console.log(error)
-      }
     }
 
     const handleDeleteOM = async() => {

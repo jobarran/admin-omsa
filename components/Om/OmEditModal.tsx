@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Chip, Divider, Grid, InputAdornment, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ErrorOutline } from '@mui/icons-material';
@@ -45,7 +45,12 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
     const [quantity, setQuantity] = useState('')
     const [description, setDescription] = useState('')
     const [codeError, setCodeError] = useState(false)
-    const [quantityError, setQuantityError] = useState(false)
+    const [quantityError, setQuantityError] = useState(false)  
+
+    // useEffect(() => {
+    //   setElementRows(initialRows)
+    // }, [openModal])
+    
     
     
     const onSubmit: SubmitHandler<IOm> = async(data) => {
