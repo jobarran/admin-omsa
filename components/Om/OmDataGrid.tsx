@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 
-import { Avatar, Box, Button, Card, CardHeader, Divider, Grid, Tooltip, useMediaQuery, useTheme, Typography, capitalize } from '@mui/material';
-import { DataGrid, GridActionsCellItem, GridColDef, GridRenderCellParams, GridRowsProp, useGridApiRef } from '@mui/x-data-grid'
+import { Avatar, Box, Button, Card, CardHeader, Divider, Grid, Tooltip, useMediaQuery, useTheme, Typography, capitalize, Stack } from '@mui/material';
+import { DataGrid, GridActionsCellItem, GridColDef, GridRenderCellParams, GridRowId, GridRowsProp, useGridApiRef } from '@mui/x-data-grid'
 
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
@@ -14,7 +14,9 @@ import CallMadeOutlinedIcon from '@mui/icons-material/CallMadeOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircleIcon from '@mui/icons-material/Circle';
 import { capitalizeAndSpaceInit, statusColor } from '@/utils';
-import { OmAddModal } from '.';
+import { OmAddModal, OmDeleteConfirmationDialog, OmEditModal } from '.';
+import { adminObraApi } from '@/api';
+import { IOm } from '@/interfaces';
 
 interface Props {
   data: any,
@@ -59,7 +61,9 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const [columnVisible, setColumnVisible] = useState(ALL_COLUMNS);
   const [openModal, setOpenModal] = useState(false);
-
+  const [openDeleteConfirmationDialog, setOpenDeleteConfirmationDialog] = useState({status: false, id:''})
+  const [omData, setOmData] = useState<IOm>()
+  const [openOmEditModal, setOpenOmEditModal] = useState(false)
 
   useEffect(() => {
       const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
@@ -202,7 +206,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
                   </Tooltip>
                 }
                 label="Editar"
-                onClick={() => {} }
+                onClick={()=>handleOpenEditModal(params.id)}
                 showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
@@ -213,7 +217,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
                   </Tooltip>
                 }
                 label="Eliminar"
-                onClick={() => {} }
+                onClick={()=>handleOpenDeleteDialog(params.id)}
                 showInMenu={ matches ? false : true }
               />,
           ],
@@ -222,7 +226,59 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
 
     const handleOpenModal = () => {
       setOpenModal(true);
-  };
+    };
+
+    const handleOpenDeleteDialog = (id: string) => {
+      setOpenDeleteConfirmationDialog({status: true, id: id})
+    }
+
+    const handleOpenEditModal = (id:string) => {
+      setOpenOmEditModal(true);
+      setOmData(
+        data.find((om:any) => om.name === id)
+      )
+    }
+
+    const handleEditOm = async() => {
+      try {
+        const submitted = await adminObraApi.put(`/om`, {
+          data: {
+            id: omData ? omData.name : '',
+            data: omData
+          }
+        })
+        if (submitted.statusText === 'OK') {
+          setOpenDeleteConfirmationDialog({status:false, id:''})
+          setIsMutating(true)
+          setTimeout(() => {
+              setIsMutating(false)
+          }, 1000);
+        }        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const handleDeleteOM = async() => {
+      try {
+        const submitted = await adminObraApi.delete(`/om`, {
+          data: {
+            id: openDeleteConfirmationDialog.id
+          }
+        })
+        if (submitted.statusText === 'OK') {
+          setOpenDeleteConfirmationDialog({status:false, id:''})
+          setIsMutating(true)
+          setTimeout(() => {
+              setIsMutating(false)
+          }, 1000);
+        }        
+      } catch (error) {
+        console.log(error)
+      }
+
+
+    }
   
   return (
 
@@ -255,12 +311,32 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
             title='Orden de Montaje'
         />
 
+        <OmDeleteConfirmationDialog
+          openDeleteConfirmationDialog={openDeleteConfirmationDialog}
+          setOpenDeleteConfirmationDialog={setOpenDeleteConfirmationDialog}
+          handleDeleteOm={() => handleDeleteOM()}
+        />
+
         <OmAddModal
             openModal={openModal}
             setOpenModal={setOpenModal}
             setIsMutating={setIsMutating}
             idObra={obra.idObra}
         />
+
+        {
+          omData
+          ?
+          <OmEditModal
+            openModal={openOmEditModal}
+            setOpenModal={setOpenOmEditModal}
+            setIsMutating={setIsMutating}
+            idObra={obra.idObra}
+            omData={omData}
+            setOmData={setOmData}
+        />
+          : <></>
+        }
 
         <Divider/>
 
@@ -274,6 +350,10 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
             hideFooterPagination
             autoHeight={true}
             disableRowSelectionOnClick
+            localeText={{
+              noRowsLabel: "No hay OM cargadas",
+              noResultsOverlayLabel: "La búsqueda no arrojó ningun resultado"
+            }}
             slotProps={{
               toolbar: {
                 showQuickFilter: true,
@@ -282,7 +362,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
             sx={{
               border: 0,
             }}
-        />
+          />
       </Card>
 
       <Divider/>

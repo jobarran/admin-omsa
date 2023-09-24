@@ -3,6 +3,7 @@ import { GridColDef, GridActionsCellItem, DataGrid, GridRowId, GridValidRowModel
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { FC } from 'react';
+import useState from 'react';
 
 interface Props {
     elementRows: readonly GridValidRowModel[],
@@ -14,7 +15,9 @@ interface Props {
     description: string,
     setDescription: React.Dispatch<React.SetStateAction<string>>,
     codeError: boolean,
-    setCodeError: React.Dispatch<React.SetStateAction<boolean>>
+    setCodeError: React.Dispatch<React.SetStateAction<boolean>>,
+    quantityError: boolean,
+    setQuantityError: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const OmAddModalTable:FC<Props> = ({
@@ -27,8 +30,11 @@ export const OmAddModalTable:FC<Props> = ({
     description,
     setDescription,
     codeError,
-    setCodeError
+    setCodeError,
+    quantityError,
+    setQuantityError
 }) => { 
+
 
     const columns: GridColDef[] = [
         { 
@@ -84,6 +90,19 @@ export const OmAddModalTable:FC<Props> = ({
 
       const handleAddElement = () => {
 
+        setCodeError(false)
+        setQuantityError(false)
+
+        if (code === '') {
+            setCodeError(true)
+            return
+        }
+
+        if (quantity === '') {
+            setQuantityError(true)
+            return
+        }
+
         const codeExists = elementRows.some(item => item.code === code)
 
         if (!codeExists) {
@@ -95,6 +114,7 @@ export const OmAddModalTable:FC<Props> = ({
             setQuantity('')
             setDescription('')
             setCodeError(false)
+            setQuantityError(false)
           } else {
             setCodeError(true)
           }
@@ -102,6 +122,17 @@ export const OmAddModalTable:FC<Props> = ({
 
     const handleDeleteElement = (id: GridRowId) => () => {
         setElementRows(elementRows.filter(item => item.code !== id))
+    }
+
+    const handleCodeError = () => {
+
+        if ( codeError ) 
+
+        if ( code === '' ) {
+            return 'Debe indicar un código'
+        } else {
+            return 'Código repetido'
+        }
     }
 
   return (
@@ -120,7 +151,7 @@ export const OmAddModalTable:FC<Props> = ({
                         setCode(event.target.value);
                     }}
                     error={ codeError }
-                    helperText={ !codeError ? '' : 'Códdigo repetido' }
+                    helperText={ handleCodeError() }
                 />
             </Grid>
             <Grid item xs={6} sm={2}>
@@ -134,6 +165,8 @@ export const OmAddModalTable:FC<Props> = ({
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         setQuantity(event.target.value);
                     }}
+                    error={ quantityError }
+                    helperText={ !quantityError ? '' : 'Debe indicar cantidad' }
                 />
             </Grid>
             <Grid item xs={10} sm={6}>
@@ -157,7 +190,7 @@ export const OmAddModalTable:FC<Props> = ({
             </Grid>
         </Grid>
 
-        <Grid item xs={12} sx={{ mb:2}}>
+        <Grid item xs={12}>
             <DataGrid
                 rows={elementRows}
                 columns={columns}
@@ -174,7 +207,7 @@ export const OmAddModalTable:FC<Props> = ({
                     },
                 }}
                 sx={{
-                border: 0,
+                    border: 0,
                 }}
             />
         </Grid>

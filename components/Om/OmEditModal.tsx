@@ -24,15 +24,15 @@ interface Props {
     openModal: boolean,
     setOpenModal: any,
     idObra: string,
-    setIsMutating: any
+    setIsMutating: any,
+    omData: any,
+    setOmData: any,
 }
 
 
-export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMutating}) => {
+export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMutating, omData, setOmData}) => {
 
-    const data: any = []
-
-    const initialRows: GridRowsProp  = data.map( (om: any) => ({
+    const initialRows: GridRowsProp  = omData.element.map( (om: any) => ({
         code       : om.code || '',
         quantity   : om.quantity || null,
         description: om.description || ''
@@ -51,8 +51,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
     const onSubmit: SubmitHandler<IOm> = async(data) => {
 
         try {
-            setShowError(false)
-            const submitted = await adminObraApi.post(`/om`, {
+            const submitted = await adminObraApi.put(`/om`, {
                 ...data,
                 idObra     : idObra,
                 name       : 'OM-'+ idObra + '-' + omName(data.name),
@@ -62,10 +61,12 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                 description: data.description,
                 status     : '-',
                 element    : elementRows
+            })  
 
-            })
+            //TODO: WHEN UPDATE OM USESTATE FAILD AS TRIYING TO REOPEN EDIT MODAL
 
-            if (submitted.statusText === 'Created') {
+            console.log(submitted.statusText)
+            if (submitted.statusText === 'OK') {
                 setIsMutating(true)
                 setTimeout(() => {
                     setIsMutating(false)
@@ -90,6 +91,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
         setCode('')
         setQuantity('')
         setDescription('')
+        setOmData('')
     };
 
     
@@ -103,7 +105,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
         onClose={handleClose}
     >
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <DialogTitle>Nueva Orden de Montaje</DialogTitle>
+            <DialogTitle>{omData.name}</DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
 
@@ -124,6 +126,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 size='small'
                                 label="Nombre"
                                 variant="outlined"
+                                value={omData ? omData.name.slice(-3) : ''}
                                 fullWidth 
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">{`OM-${idObra}-`}</InputAdornment>
@@ -142,6 +145,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 label="Revision"
                                 variant="outlined"
                                 fullWidth 
+                                value={omData ? omData.revision : ''}
                                 inputProps={{ maxLength: 2 }}
                                 { ...register('revision', {
                                     required: 'Debe indicar la revisión',
@@ -156,6 +160,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 label="Piso"
                                 variant="outlined"
                                 fullWidth 
+                                value={omData ? omData.floor : ''}
                                 { ...register('floor', {
                                     required: 'Debe indicar el Piso',
                                     
@@ -170,6 +175,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 label="Sector"
                                 variant="outlined"
                                 fullWidth 
+                                value={omData ? omData.sector : ''}
                                 { ...register('sector', {
                                     required: 'Debe indicar el sector',
                                     
@@ -185,6 +191,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                                 multiline
                                 variant="outlined"
                                 fullWidth 
+                                value={omData ? omData.description : ''}
                                 { ...register('description', {
                                     required: 'Debe indicar la descripción',
                                     
