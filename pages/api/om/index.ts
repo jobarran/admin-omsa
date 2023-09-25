@@ -107,14 +107,18 @@ const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
     const omId = req.body.name;
     const data = req.body
 
+    console.log({req: req.body})
+
     try {
         await db.connect();
-        const om = await Om.findOne({name: omId});
+        const om = await Om.findOne({name: req.body.name});
+        console.log({exist:om})
         if ( !om ) {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
-        const updateOm = await Om.findOneAndUpdate({name: omId}, data, { new: true });
+        const updateOm = await Om.findOneAndUpdate({name: req.body.name}, data, { new: true });
+        console.log({ok:updateOm})
         await db.disconnect();
         res.status(200).json({ message: 'OM actualizada' });
 
