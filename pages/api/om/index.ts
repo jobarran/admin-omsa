@@ -53,8 +53,6 @@ const getOm = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
 const createOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
-    console.log(req.body)
-
     try {
         await db.connect();
         const omInDB = await Om.findOne({ name: req.body.name });
@@ -89,23 +87,18 @@ const deleteOm = async(req: NextApiRequest, res: NextApiResponse) => {
         const om = await Om.findOne({name: omId});
         console.log(om)
         if ( !om ) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'OM no existe por ese id'
-            });
+            return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
         await Om.findOneAndDelete({name: omId});
-
-        res.json({ ok: true, msg: 'OM eliminada' });
+        await db.disconnect();
+        res.status(200).json({ message: 'OM eliminada' });
 
         
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el administrador'
-        });
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar logs del servidor' });
     }
 
 }
@@ -115,29 +108,23 @@ const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
     const omId = req.body.name;
     const data = req.body
 
-    console.log(req.body)
-
     try {
 
         const om = await Om.findOne({name: omId});
         if ( !om ) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'OM no existe por ese id'
-            });
+            return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
         const updateOm = await Om.findOneAndUpdate({name: omId}, data, { new: true });
         console.log({nueva: updateOm})
-        res.json({ ok: true, msg: 'OM Actualizado' });
+        await db.disconnect();
+        res.status(200).json({ message: 'OM actualizada' });
 
         
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el administrador'
-        });
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar logs del servidor' });
     }
 
 }
