@@ -69,6 +69,8 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
   const [openOmEditModal, setOpenOmEditModal] = useState(false)
   const [openRequestModal, setOpenRequestModal] = useState({status: false, id:''})
 
+  console.log(rows)
+
   useEffect(() => {
       const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
       setColumnVisible(newColumns);
@@ -138,7 +140,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           renderCell: (params: GridRenderCellParams) => (
             <>
               <Tooltip title={ params.value === '-' ? '' : params.value} arrow>
-                <CircleIcon fontSize='small' color={ statusColor(params.value) } />
+                <CircleIcon fontSize='small' color={ statusColor(params.value, params.row.necesidad) } />
               </Tooltip>
             </>
 
@@ -189,7 +191,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
                 key={params.id}
                 icon={
                   <Tooltip title="Pedir" arrow>
-                    <CallMadeOutlinedIcon sx={{ color: data.necesidad === '-' ? theme.palette.primary.main : 'disabled' }}  />
+                    <CallMadeOutlinedIcon sx={{ color: theme.palette.primary.main }}  />
                   </Tooltip>
                 }
                 label="Pedir"

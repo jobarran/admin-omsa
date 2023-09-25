@@ -64,11 +64,10 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
                 floor      : data.floor,
                 sector     : data.sector,
                 description: data.description,
-                status     : '-',
+                status     : data.status,
+                necesidad  : data.necesidad,
                 element    : elementRows
             })  
-
-            //TODO: WHEN UPDATE OM USESTATE FAILD AS TRIYING TO REOPEN EDIT MODAL
 
             console.log(submitted.statusText)
             if (submitted.statusText === 'OK') {

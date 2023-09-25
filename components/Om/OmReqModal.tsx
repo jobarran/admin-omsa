@@ -99,7 +99,7 @@ export const OmReqModal:FC<Props> = ({idObra, setIsMutating, openRequestModal, s
                                 <DatePicker
                                 label="Fecha"
                                 format="DD/MM/YYYY"
-                                disableFuture
+                                disablePast
                                 slotProps={{
                                     textField: { size: 'small', fullWidth: true },                  
                                 }}

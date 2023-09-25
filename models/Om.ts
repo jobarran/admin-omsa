@@ -18,7 +18,7 @@ const omSchema = new Schema({
     status     : {
         type: String,
         enum: {
-            values  : ['pedido', 'recibido', 'parcial', '-', ''],
+            values  : ['pedido', 'recibido', '-', ''],
             message : '{VALUE} no es un estado válido',
             required: false
         }

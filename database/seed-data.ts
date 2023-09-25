@@ -247,7 +247,7 @@ export const initialData: SeedData = {
             floor      : 1,
             sector     : 'Torre',
             description: 'Colocación de modulos en Piso 1',
-            status     : 'parcial',
+            status     : '-',
             element    : [
                 {
                     quantity   : 10,
