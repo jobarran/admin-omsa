@@ -82,24 +82,20 @@ const deleteOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
     const omId = req.body.id;
 
-    console.log({ req: req.body.id})
-
     try {
-
-        const om = await Om.findOne({name: omId});
-        console.log({OM: om})
+        await db.connect();
+        const om = await Om.findOne({name: req.body.id});
         if ( !om ) {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
-        await Om.findOneAndDelete({name: omId});
-        console.log({ eliminado: 'OK' })
+        await Om.findOneAndDelete({name: req.body.id});
         await db.disconnect();
         res.status(200).json({ message: 'OM eliminada' });
 
         
     } catch (error) {
-        console.log({error: error});
+        console.log(error);
         await db.disconnect();
         return res.status(400).json({ message: 'Revisar logs del servidor' });
     }
@@ -112,14 +108,13 @@ const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
     const data = req.body
 
     try {
-
+        await db.connect();
         const om = await Om.findOne({name: omId});
         if ( !om ) {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
         const updateOm = await Om.findOneAndUpdate({name: omId}, data, { new: true });
-        console.log({nueva: updateOm})
         await db.disconnect();
         res.status(200).json({ message: 'OM actualizada' });
 
