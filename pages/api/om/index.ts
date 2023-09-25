@@ -82,21 +82,24 @@ const deleteOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
     const omId = req.body.id;
 
+    console.log({ req: req.body.id})
+
     try {
 
         const om = await Om.findOne({name: omId});
-        console.log(om)
+        console.log({OM: om})
         if ( !om ) {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
         await Om.findOneAndDelete({name: omId});
+        console.log({ eliminado: 'OK' })
         await db.disconnect();
         res.status(200).json({ message: 'OM eliminada' });
 
         
     } catch (error) {
-        console.log(error);
+        console.log({error: error});
         await db.disconnect();
         return res.status(400).json({ message: 'Revisar logs del servidor' });
     }
