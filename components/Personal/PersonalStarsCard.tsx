@@ -10,7 +10,7 @@ interface Props {
 export const PersonalStarsCard:FC<Props> = ({ name, value }) => {
   return (
     
-    <Grid item xs={4}>
+    <Grid item xs={12} md={4}>
         <Card sx={{ boxShadow: 0, }} >
           <CardHeader
             avatar={

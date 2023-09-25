@@ -49,51 +49,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, query }
        }
   }
 }
-  
-  
-
-// //* Use getStaticPaths if you are statically pre-rendering pages that use dynamic routes
-// export const getStaticPaths: GetStaticPaths = async (ctx) => {
-
-//   const userLegajos = await dbUsers.getAllUserLegajo();
-
-//   return  {
-
-//     paths: userLegajos.map( ({ legajo }) => ({
-//       params: {
-//         legajo
-//       }
-//     })),
-//     fallback: 'blocking',
-//   };
-
-// }
-
-// //* Get the proprs from API en tiempo de BUILD
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-
-
-//   const { legajo = '' } = params as { legajo: string }
-//   const user = await dbUsers.getUsersByLegajo( legajo );
-  
-  
-//   if ( !user ) {
-//     return {
-//       redirect: {
-//         destination: '/',
-//         permanent: false
-//       }
-//     }
-//   }
-
-//   return {
-
-//     props: {
-//       user
-//     },
-//     revalidate: 86400 // en segundos
-
-//   }
-// }
 
 export default UserPage

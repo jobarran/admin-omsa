@@ -16,5 +16,6 @@ export interface IOm {
     sector     : string;
     description: string;
     status     : string;
+    necesidad  : string;
     element    :  Array<element>
 }

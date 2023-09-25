@@ -104,9 +104,6 @@ const deleteOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
 const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
-    const omId = req.body.name;
-    const data = req.body
-
     console.log({req: req.body})
 
     try {
@@ -117,7 +114,7 @@ const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
-        const updateOm = await Om.findOneAndUpdate({name: req.body.name}, data, { new: true });
+        const updateOm = await Om.findOneAndUpdate({name: req.body.name}, req.body, { new: true });
         console.log({ok:updateOm})
         await db.disconnect();
         res.status(200).json({ message: 'OM actualizada' });

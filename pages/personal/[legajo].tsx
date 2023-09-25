@@ -40,12 +40,12 @@ export const UserPage: NextPage<Props> = ({ personal }) => {
         <CustomBreadCrumbs references={ breadcrumbsRef }/>
 
         <Grid container spacing={2}>
-            <Grid container item spacing={2} xs={4}>
+            <Grid container item spacing={2} xs={12} md={4}>
             <PersonalInfoCard personal={personal} />
             <PersonalTagsCard personal={personal} />
         </Grid>
 
-        <Grid container item spacing={2} xs={8}>
+        <Grid container item spacing={2} xs={12} md={8}>
           <PersonalStarsCard name={"Asistencia"} value={3} />  
           <PersonalStarsCard name={"Actitud"} value={2} />
           <PersonalStarsCard name={"Conocimiento"} value={5} />

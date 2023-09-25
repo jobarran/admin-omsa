@@ -14,7 +14,7 @@ import CallMadeOutlinedIcon from '@mui/icons-material/CallMadeOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircleIcon from '@mui/icons-material/Circle';
 import { capitalizeAndSpaceInit, statusColor } from '@/utils';
-import { OmAddModal, OmDeleteConfirmationDialog, OmEditModal } from '.';
+import { OmAddModal, OmDeleteConfirmationDialog, OmEditModal, OmReqModal } from '.';
 import { adminObraApi } from '@/api';
 import { IOm } from '@/interfaces';
 
@@ -29,8 +29,9 @@ const MOBILE_COLUMNS = {
   revision   : false,
   floor      : false,
   sector     : false,
-  description: true,
+  description: false,
   status     : true,
+  necesidad  : true,
   element    : true
 };
 const ALL_COLUMNS = {
@@ -40,6 +41,7 @@ const ALL_COLUMNS = {
   sector     : true,
   description: true,
   status     : true,
+  necesidad  : true,
   element    : true
 };
 
@@ -50,6 +52,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
     revision   : om.revision,
     floor      : om.floor,
     sector     : om.sector,
+    necesidad  : om.necesidad === '-' ? '' : om.necesidad,
     description: om.description,
     status     : om.status,
   }))
@@ -64,6 +67,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
   const [openDeleteConfirmationDialog, setOpenDeleteConfirmationDialog] = useState({status: false, id:''})
   const [omData, setOmData] = useState<IOm>()
   const [openOmEditModal, setOpenOmEditModal] = useState(false)
+  const [openRequestModal, setOpenRequestModal] = useState({status: false, id:''})
 
   useEffect(() => {
       const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
@@ -90,8 +94,8 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           headerName: 'Nombre',
           editable: false,
           flex: 1,
-          minWidth: 100,
-          maxWidth: 150,
+          minWidth: 120,
+          maxWidth: matches ? 150 : 500
       },
       {
           field: 'revision',
@@ -130,28 +134,32 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
           flex: 1,
           minWidth: 20,
           maxWidth: matches ? 80 : 60,
+          disableColumnMenu: true,
           renderCell: (params: GridRenderCellParams) => (
             <>
               <Tooltip title={ params.value === '-' ? '' : params.value} arrow>
                 <CircleIcon fontSize='small' color={ statusColor(params.value) } />
               </Tooltip>
-              <Typography
-                variant='body2'
-                sx={{ display:{xs:'none', sm:'flex'}, ml:1}}
-              >
-                { capitalize(params.value) === '-' ? '' : capitalize(params.value) }
-              </Typography>
             </>
 
 
           )      
       },
       {
+          field: 'necesidad',
+          headerName: 'Necesidad',
+          flex: 1,
+          minWidth: 100,
+          maxWidth: 130,
+          editable: false,
+          disableColumnMenu: true,
+      },
+      {
           field: 'actions',
           headerName: 'Acciones',
           type: 'actions',
           flex: 1,
-          minWidth: matches ? 220 : 50,
+          minWidth: matches ? 220 : 40,
           maxWidth: 220,
           editable: false,
           getActions: (params: any) => [
@@ -181,11 +189,11 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
                 key={params.id}
                 icon={
                   <Tooltip title="Pedir" arrow>
-                    <CallMadeOutlinedIcon sx={{ color:theme.palette.primary.main }} />
+                    <CallMadeOutlinedIcon sx={{ color: data.necesidad === '-' ? theme.palette.primary.main : 'disabled' }}  />
                   </Tooltip>
                 }
                 label="Pedir"
-                onClick={() => {} }
+                onClick={()=>handleOpenRquestModal(params.id)}
                 showInMenu={ matches ? false : true }
               />,
               <GridActionsCellItem
@@ -239,6 +247,11 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
         data.find((om:any) => om.name === id)
       )
     }
+
+    const handleOpenRquestModal  = (id:string) => {
+      setOpenRequestModal({ status: true, id: id });
+    }
+
 
     const handleDeleteOM = async() => {
       try {
@@ -318,6 +331,13 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
         />
           : <></>
         }
+
+        <OmReqModal
+          idObra={obra.idObra}
+          setIsMutating={setIsMutating}
+          openRequestModal={openRequestModal}
+          setOpenRequestModal={setOpenRequestModal}
+        />
 
         <Divider/>
 

@@ -61,6 +61,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                 sector     : data.sector,
                 description: data.description,
                 status     : '-',
+                necesidad  : '-',
                 element    : elementRows
 
             })

@@ -23,6 +23,7 @@ const omSchema = new Schema({
             required: false
         }
     },
+    necesidad  : { type: String, required: true },
     element    : [omSubSchema],
     }, {
     timestamps : true
