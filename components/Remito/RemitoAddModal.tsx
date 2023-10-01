@@ -53,42 +53,29 @@ export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNa
     
     const onSubmit = async() => {
 
-        console.log({
-            obra: obraSelect,
-            fecha: date,
-            remito: remitoNro,
-            Observaciones: observaciones,
-            elements: elementRows
-        })
+        console.log(elementRows)
 
-        // try {
-        //     setShowError(false)
-        //     const submitted = await adminObraApi.post(`/om`, {
-        //         ...data,
-        //         idObra     : idObra,
-        //         name       : 'OM-'+ idObra + '-' + omName(data.name),
-        //         revision   : omRevision(data.revision),
-        //         floor      : data.floor,
-        //         sector     : data.sector,
-        //         description: data.description,
-        //         status     : '-',
-        //         necesidad  : '-',
-        //         pedido     : '-',
-        //         element    : elementRows
+        try {
+            setShowError(false)
+            const submitted = await adminObraApi.post(`/remito`, {
+                number       : remitoNro,
+                obra         : obraSelect,
+                date         : date,
+                observaciones: observaciones,
+                elementos    : elementRows
 
-        //     })
+            })
 
-        //     if (submitted.statusText === 'Created') {
-        //         setOpenModal(false)
-        //         reset()
-        //         setElementRows([])
-        //     }
-        // } catch (error) {
-        //     setShowError(true)
-        //     setTimeout(() => {
-        //         setShowError(false)
-        //     }, 3000);
-        // }
+            if (submitted.statusText === 'Created') {
+                setOpenModal(false)
+                setElementRows([])
+            }
+        } catch (error) {
+            setShowError(true)
+            setTimeout(() => {
+                setShowError(false)
+            }, 3000);
+        }
 
     }
     
@@ -208,8 +195,8 @@ export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNa
                         
             </DialogContent>
             <DialogActions sx={{ mb:1, mr:1 }}>
-                <Button color='error' onClick={handleClose}>Cancel</Button>
-                <Button onClick={onSubmit} >Subscribe</Button>
+                <Button color='error' onClick={handleClose}>Cancelar</Button>
+                <Button onClick={onSubmit} >Aceptar</Button>
             </DialogActions>
     </Dialog>
 

@@ -14,20 +14,20 @@ import { useRouter } from 'next/router';
 import { RemitoAddModal } from './RemitoAddModal';
 
 const data = [
-  {om: '1371-OM-001', codigo: 'A001', cantidad: 10},
-  {om: '1371-OM-002', codigo: 'da', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'das', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', codigo: 'wtbtr', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'bbvd', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'mjmuy', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', codigo: 'nyli', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'nbtj', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'fmuy', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'myufb', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', codigo: 'ngig', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'nfnty', cantidad: 10},
-  {om: '1371-OM-001', codigo: 'bnrnty', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', codigo: 'nftynf', cantidad: 10},
+  {om: '1371-OM-001', code: 'A001', cantidad: 10},
+  {om: '1371-OM-002', code: 'da', cantidad: 10},
+  {om: '1371-OM-001', code: 'das', idMod: 456, cantidad: 10},
+  {om: '1371-OM-001', code: 'wtbtr', cantidad: 10},
+  {om: '1371-OM-001', code: 'bbvd', cantidad: 10},
+  {om: '1371-OM-001', code: 'mjmuy', idMod: 456, cantidad: 10},
+  {om: '1371-OM-001', code: 'nyli', cantidad: 10},
+  {om: '1371-OM-001', code: 'nbtj', cantidad: 10},
+  {om: '1371-OM-001', code: 'fmuy', cantidad: 10},
+  {om: '1371-OM-001', code: 'myufb', idMod: 456, cantidad: 10},
+  {om: '1371-OM-001', code: 'ngig', cantidad: 10},
+  {om: '1371-OM-001', code: 'nfnty', cantidad: 10},
+  {om: '1371-OM-001', code: 'bnrnty', idMod: 456, cantidad: 10},
+  {om: '1371-OM-001', code: 'nftynf', cantidad: 10},
 ]
 
 interface Props {
@@ -41,9 +41,9 @@ interface Props {
 export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
 
   const initialRows: GridRowsProp  = data.map( (elemento: any) => ({
-    id: elemento.om + '-' + elemento.codigo ,
+    id: elemento.om + '-' + elemento.code ,
     om: elemento.om,
-    codigo: elemento.codigo,
+    code: elemento.code,
     idMod: elemento.idMod || '',
     cantidad: elemento.cantidad,
   }))
@@ -68,7 +68,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
           maxWidth: 350,
       },
       {
-          field: 'codigo',
+          field: 'code',
           headerName: 'Código',
           editable: false,
           flex: 1,

@@ -21,7 +21,7 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
 
     const initialRows: GridRowsProp  = initData.map( (elemento: any) => ({
         om      : elemento.om,
-        codigo  : elemento.codigo,
+        code    : elemento.code,
         id      : elemento.id,
         cantidad: elemento.cantidad,
     }))
@@ -31,7 +31,7 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
     const [elementOm, setElementOm] = useState<string | null>(null);
     const [elementCode, setElementCode] = useState<string | null>(null);
     const [elementId, setElementId] = useState('')
-    const [elementQuantity, setElementQuantity] = useState('')
+    const [elementQuantity, setElementQuantity] = useState<number>(0)
     const [elementQuantityError, setElementQuantityError] = useState(false)
     const [elementCodeError, setElementCodeError] = useState(false)
     const [elementIdError, setElementIdError] = useState(false)
@@ -116,16 +116,20 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
             setElementCodeError(true)
             return
         }
-
-        if (elementQuantity === '') {
-            setElementQuantityError(true)
+        
+        const requireId = getElementIdValidation()
+        
+        if ( requireId && elementId === '') {
+            setElementIdError(true)
             return
         }
 
-        const requireId = getElementIdValidation()
+        const quantityValidation = getElementQuantityValidation()
+        const elementReceived = quantityValidation?.received ? quantityValidation.received : 0
 
-        if ( requireId && elementId === '') {
-            setElementIdError(true)
+        if ( quantityValidation!.quantity - elementReceived < elementQuantity ) {
+            console.log('aca')
+            setElementQuantityError(true)
             return
         }
 
@@ -135,27 +139,23 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
 
             setElementRows([
                 ...elementRows,
-                {om: elementOm, code: elementCode, id: elementId, quantity: elementQuantity}
+                {om: elementOm, code: elementCode, id: elementId, cantidad: elementQuantity}
             ])
             setElementOm(null)
             setElementCode(null)
             setElementId('')
-            setElementQuantity('')
+            setElementQuantity(0)
             setElementCodeError(false)
             setElementQuantityError(false)
             setElementIdError(false)
-        } else {
-            console.log('ya existe')
         }
     }
 
     const handleDeleteElement = (id: GridRowId) => () => {
-        setElementRows(elementRows.filter(item => item.code !== id))
+        setElementRows(elementRows.filter(item => item.om+item.code !== id))
     }
 
-    function getElementIdValidation() {
-
-
+    const getElementIdValidation = () => {
         if ( elementOm ) {
             const selectedObject = data.find((obj:IOm) => obj.name === elementOm);
             if (selectedObject) {
@@ -165,7 +165,20 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
                 return false; 
               }
         }
-      }
+    }
+
+    const getElementQuantityValidation = () => {
+
+        if ( elementOm ) {
+            const selectedObject = data.find((obj:IOm) => obj.name === elementOm);
+            if (selectedObject) {
+                const nestedObject = selectedObject['element'].find((element:any) => element.code === elementCode);
+                return nestedObject 
+              } else {
+                return null; 
+              }
+        }
+    }
 
     const getElementByOm = () => {
         const om =  data.find(item => item.name === elementOm);
@@ -239,7 +252,7 @@ export const RemitoAddModalTable:FC<Props> = ({ elementRows, setElementRows, obr
                     fullWidth
                     value={elementQuantity}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setElementQuantity(event.target.value);
+                        setElementQuantity(Number(event.target.value));
                     }}
                     error={ elementQuantityError }
                     helperText={ !elementQuantityError ? '' : 'Debe indicar cantidad' }

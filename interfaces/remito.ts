@@ -1,7 +1,7 @@
 
 export interface Remito {
     om      : string,
-    codigo  : string,
+    code    : string,
     id      : string,
     cantidad: number,
 }
@@ -9,7 +9,6 @@ export interface Remito {
 export interface Iremito {
     number       : string,
     obra         : string,
-    type         : boolean,
     date         : string,
     observaciones: string,
     elementos    : Array<Remito>,
