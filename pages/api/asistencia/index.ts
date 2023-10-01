@@ -84,8 +84,6 @@ const updateAsistencia = async(req: NextApiRequest, res: NextApiResponse<Data>) 
         }
     }
 
-    console.log(updatedAsistenciaByDate)
-
     const updatedAsistencia: IAsistencia | null = await Asistencia.findOneAndUpdate(
         { fecha : fecha },
         { asistenciaData : updatedAsistenciaByDate },

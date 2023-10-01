@@ -40,7 +40,6 @@ export const OmReqModal:FC<Props> = ({idObra, setIsMutating, openRequestModal, s
     
     
     const handleDayValueChange = (newValue: any) => {
-        console.log('cambiando fecha')
         setDayValue(newValue)
       }
     
@@ -51,12 +50,12 @@ export const OmReqModal:FC<Props> = ({idObra, setIsMutating, openRequestModal, s
     const handleRequest = async() => {
         try {
             const submitted = await adminObraApi.put(`/om`, {
-                name: openRequestModal.id,
-                necesidad  : dayValue.format('DD/MM/YYYY').toString(),
-                status: 'pedido'
+                name     : openRequestModal.id,
+                necesidad: dayValue.format('DD/MM/YYYY').toString(),
+                pedido   : dayjs().format('DD/MM/YYYY').toString(),
+                status   : 'pedido'
             })  
 
-            console.log(submitted.statusText)
             if (submitted.statusText === 'OK') {
                 setIsMutating(true)
                 setTimeout(() => {

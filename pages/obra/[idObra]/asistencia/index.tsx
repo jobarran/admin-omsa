@@ -66,7 +66,6 @@ export const ObraAsistenciaPage: NextPage<Props> = ({ personal, obraNames, asist
   }
 
   const handleDayValueChange = (newValue: any) => {
-    console.log('cambiando fecha')
     setDayValue(newValue)
     onGetOrCreateAsistencia(newValue)
   } 

@@ -1,9 +1,10 @@
-import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
+import { Autocomplete, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Switch, TextField, Tooltip } from '@mui/material';
 import { GridColDef, GridActionsCellItem, DataGrid, GridRowId, GridValidRowModel } from '@mui/x-data-grid';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { FC } from 'react';
 import useState from 'react';
+import { omElementType } from '@/config';
 
 interface Props {
     elementRows: readonly GridValidRowModel[],
@@ -18,6 +19,10 @@ interface Props {
     setCodeError: React.Dispatch<React.SetStateAction<boolean>>,
     quantityError: boolean,
     setQuantityError: React.Dispatch<React.SetStateAction<boolean>>,
+    type: string,
+    setType: React.Dispatch<React.SetStateAction<string>>,
+    typeError: boolean,
+    setTypeError: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const OmAddModalTable:FC<Props> = ({
@@ -32,7 +37,11 @@ export const OmAddModalTable:FC<Props> = ({
     codeError,
     setCodeError,
     quantityError,
-    setQuantityError
+    setQuantityError,
+    type,
+    setType,
+    typeError,
+    setTypeError
 }) => { 
 
 
@@ -60,6 +69,16 @@ export const OmAddModalTable:FC<Props> = ({
             field: 'description',
             headerName: 'Descripcion',
             flex: 1,
+            editable: false,
+            sortable: false,
+            disableColumnMenu: true
+        },
+        {
+            field: 'type',
+            headerName: 'Tipo',
+            flex: 1,
+            minWidth: 50,
+            maxWidth: 100,
             editable: false,
             sortable: false,
             disableColumnMenu: true
@@ -103,18 +122,25 @@ export const OmAddModalTable:FC<Props> = ({
             return
         }
 
+        if (type === '') {
+            setTypeError(true)
+            return
+        }
+
         const codeExists = elementRows.some(item => item.code === code)
 
         if (!codeExists) {
             setElementRows([
                 ...elementRows,
-                {code: code, quantity: quantity, description: description, received: 0}
+                {code: code, quantity: quantity, description: description, received: 0, type: type}
             ])
             setCode('')
             setQuantity('')
             setDescription('')
+            setType('')
             setCodeError(false)
             setQuantityError(false)
+            setTypeError(false)
           } else {
             setCodeError(true)
           }
@@ -134,6 +160,8 @@ export const OmAddModalTable:FC<Props> = ({
             return 'Código repetido'
         }
     }
+
+    
 
   return (
 
@@ -169,7 +197,7 @@ export const OmAddModalTable:FC<Props> = ({
                     helperText={ !quantityError ? '' : 'Debe indicar cantidad' }
                 />
             </Grid>
-            <Grid item xs={10} sm={6}>
+            <Grid item xs={10} sm={4}>
                 <TextField
                     size='small'
                     label="Descripción"
@@ -180,6 +208,25 @@ export const OmAddModalTable:FC<Props> = ({
                         setDescription(event.target.value);
                     }}
                 />
+            </Grid>
+            <Grid item xs={2} sm={2}>
+                <FormControl fullWidth>
+                    <Autocomplete
+                        size='small'
+                        disablePortal
+                        options={omElementType}
+                        onChange={(event: any, newValue:any) => {
+                            setType(newValue) ;
+                        }}
+                        renderInput={(params) => 
+                            <TextField
+                            {...params}
+                            label="Tipo"
+                            error={ typeError }
+                            helperText={ !typeError ? '' : 'Seleccione un tipo' }
+                        />}
+                    />
+                </FormControl>
             </Grid>
             <Grid item xs={2} sm={1} >
                 <IconButton

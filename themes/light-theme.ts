@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+import { palette } from '@mui/system';
 
 
 export const lightTheme = createTheme({
@@ -88,7 +89,7 @@ export const lightTheme = createTheme({
           borderRadius: '10px',
         },
       }
-    }
+    },    
   }
   
 });

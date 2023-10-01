@@ -6,6 +6,8 @@ const omSubSchema = new Schema({
     code       : {type: String, required: true},
     description: {type: String, required: true},
     received   : {type: Number, required: true},
+    type       : {type: String, required: true}, 
+    modId      : {type: Number, required: false},
 })
 
 const omSchema = new Schema({
@@ -24,6 +26,7 @@ const omSchema = new Schema({
         }
     },
     necesidad  : { type: String, required: true },
+    pedido     : { type: String, required: true },
     element    : [omSubSchema],
     }, {
     timestamps : true

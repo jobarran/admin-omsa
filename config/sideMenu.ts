@@ -71,4 +71,9 @@ export const sideMenuObraCarga: Props[] = [
         avatar: AddCircleOutlineOutlinedIcon,
         url: "/asistencia",
     },
+    {
+        name: "Cargar Remito",
+        avatar: AddCircleOutlineOutlinedIcon,
+        url: "/remito",
+    },
 ]

@@ -5,6 +5,8 @@ export interface element {
     code       : string;
     description: string;
     received   : number;
+    type       : string;
+    modId      : number
 }
 
 export interface IOm {
@@ -17,5 +19,6 @@ export interface IOm {
     description: string;
     status     : string;
     necesidad  : string;
+    pedido     : string;
     element    :  Array<element>
 }

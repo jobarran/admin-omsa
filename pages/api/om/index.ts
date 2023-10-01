@@ -65,7 +65,6 @@ const createOm = async(req: NextApiRequest, res: NextApiResponse) => {
         const om = new Om( req.body );
         await om.save();
         await db.disconnect();
-        console.log({NuevaOm: om})
         res.status(201).json( om );
 
 
@@ -104,18 +103,16 @@ const deleteOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
 const editOm = async(req: NextApiRequest, res: NextApiResponse) => {
 
-    console.log({req: req.body})
+    console.log({req: req.body.element})
 
     try {
         await db.connect();
         const om = await Om.findOne({name: req.body.name});
-        console.log({exist:om})
         if ( !om ) {
             return res.status(400).json({message: 'OM no existe por ese id'});
         }
 
         const updateOm = await Om.findOneAndUpdate({name: req.body.name}, req.body, { new: true });
-        console.log({ok:updateOm})
         await db.disconnect();
         res.status(200).json({ message: 'OM actualizada' });
 

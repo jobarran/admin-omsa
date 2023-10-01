@@ -66,10 +66,10 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
                 description: data.description,
                 status     : data.status,
                 necesidad  : data.necesidad,
+                pedido     : data.pedido,
                 element    : elementRows
             })  
 
-            console.log(submitted.statusText)
             if (submitted.statusText === 'OK') {
                 setIsMutating(true)
                 setTimeout(() => {

@@ -15,6 +15,7 @@ import { adminObraApi } from '@/api';
 import { omName } from '../../utils/omName';
 import { omRevision } from '../../utils/omRevision';
 import { OmAddModalTable } from '.';
+import dayjs from 'dayjs';
 
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -35,7 +36,8 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
     const initialRows: GridRowsProp  = data.map( (om: any) => ({
         code       : om.code || '',
         quantity   : om.quantity || null,
-        description: om.description || ''
+        description: om.description || '',
+        received   : om.received
     }))
 
     const [elementRows, setElementRows] = useState(initialRows);
@@ -46,6 +48,8 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
     const [description, setDescription] = useState('')
     const [codeError, setCodeError] = useState(false)
     const [quantityError, setQuantityError] = useState(false)
+    const [type, setType] = useState('')
+    const [typeError, setTypeError] = useState(false)
     
     
     const onSubmit: SubmitHandler<IOm> = async(data) => {
@@ -62,6 +66,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                 description: data.description,
                 status     : '-',
                 necesidad  : '-',
+                pedido     : '-',
                 element    : elementRows
 
             })
@@ -213,6 +218,10 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
                             setCodeError={setCodeError}
                             quantityError={quantityError}
                             setQuantityError={setQuantityError}
+                            type={type}
+                            setType={setType}
+                            typeError={typeError}
+                            setTypeError={setTypeError}
                         />
                     </Grid>
                         

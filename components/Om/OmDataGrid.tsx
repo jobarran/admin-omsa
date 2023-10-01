@@ -68,8 +68,7 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
   const [omData, setOmData] = useState<IOm>()
   const [openOmEditModal, setOpenOmEditModal] = useState(false)
   const [openRequestModal, setOpenRequestModal] = useState({status: false, id:''})
-
-  console.log(rows)
+  const [openOmReceiveModal, setOpenOmReceiveModal] = useState(false)
 
   useEffect(() => {
       const newColumns = matches ? ALL_COLUMNS : MOBILE_COLUMNS;
@@ -201,17 +200,6 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
               <GridActionsCellItem
                 key={params.id}
                 icon={
-                  <Tooltip title="Recibir" arrow>
-                    <CallReceivedOutlinedIcon sx={{ color:theme.palette.primary.main }} />
-                  </Tooltip>
-                }
-                label="Recibir"
-                onClick={() => {} }
-                showInMenu={ matches ? false : true }
-              />,
-              <GridActionsCellItem
-                key={params.id}
-                icon={
                   <Tooltip title="Editar" arrow>
                     <EditOutlinedIcon sx={{ color:theme.palette.primary.main }} />
                   </Tooltip>
@@ -245,6 +233,13 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
 
     const handleOpenEditModal = (id:string) => {
       setOpenOmEditModal(true);
+      setOmData(
+        data.find((om:any) => om.name === id)
+      )
+    }
+
+    const handleOpenReceiveModal = (id:string) => {
+      setOpenOmReceiveModal(true);
       setOmData(
         data.find((om:any) => om.name === id)
       )

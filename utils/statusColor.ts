@@ -1,6 +1,3 @@
-import { useTheme } from "@emotion/react";
-
-
 
 function daysUntilToday(givenDate:string) {
   try {
@@ -24,8 +21,6 @@ function daysUntilToday(givenDate:string) {
 
 
 export const statusColor  = ( status: string | '', necesidad: string | '' ) => {
-
-  const theme = useTheme()
 
   const days = daysUntilToday(necesidad)
 
