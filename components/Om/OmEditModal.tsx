@@ -35,7 +35,8 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
     const initialRows: GridRowsProp  = omData.element.map( (om: any) => ({
         code       : om.code || '',
         quantity   : om.quantity || null,
-        description: om.description || ''
+        description: om.description || '',
+        type       : om.type || '',
     }))
 
     const [elementRows, setElementRows] = useState(initialRows);
@@ -46,6 +47,8 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
     const [description, setDescription] = useState('')
     const [codeError, setCodeError] = useState(false)
     const [quantityError, setQuantityError] = useState(false)  
+    const [type, setType] = useState('')
+    const [typeError, setTypeError] = useState(false)
 
     // useEffect(() => {
     //   setElementRows(initialRows)
@@ -96,6 +99,7 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
         setQuantity('')
         setDescription('')
         setOmData('')
+        setType('')
     };
 
     
@@ -223,6 +227,10 @@ export const OmEditModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMu
                             setCodeError={setCodeError}
                             quantityError={quantityError}
                             setQuantityError={setQuantityError}
+                            type={type}
+                            setType={setType}
+                            typeError={typeError}
+                            setTypeError={setTypeError}
                         />
                     </Grid>
                         

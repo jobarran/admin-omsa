@@ -111,6 +111,7 @@ export const OmAddModalTable:FC<Props> = ({
 
         setCodeError(false)
         setQuantityError(false)
+        setTypeError(false)
 
         if (code === '') {
             setCodeError(true)
@@ -122,7 +123,7 @@ export const OmAddModalTable:FC<Props> = ({
             return
         }
 
-        if (type === '') {
+        if (type === '' || type === null) {
             setTypeError(true)
             return
         }
@@ -217,6 +218,7 @@ export const OmAddModalTable:FC<Props> = ({
                         options={omElementType}
                         onChange={(event: any, newValue:any) => {
                             setType(newValue) ;
+                            console.log(type)
                         }}
                         renderInput={(params) => 
                             <TextField

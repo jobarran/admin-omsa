@@ -37,7 +37,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
         code       : om.code || '',
         quantity   : om.quantity || null,
         description: om.description || '',
-        received   : om.received
+        type       : om.type || '',
     }))
 
     const [elementRows, setElementRows] = useState(initialRows);
@@ -96,6 +96,7 @@ export const OmAddModal:FC<Props> = ({ openModal, setOpenModal, idObra, setIsMut
         setCode('')
         setQuantity('')
         setDescription('')
+        setType('')
     };
 
     
