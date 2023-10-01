@@ -112,7 +112,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
               <Box display='flex' >
                
                 <Button 
-                  sx={{mt:0.5, ml:0.5, display:{xs:'none', md:'flex'}}}
+                  sx={{mt:0.5, ml:0.5 }}
                   onClick={handleOpenModal}
                 >
                   Nuevo Remito
