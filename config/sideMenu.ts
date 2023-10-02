@@ -8,6 +8,7 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 
+
 interface Props {
     name: string,
     avatar: OverridableComponent<SvgIconTypeMap<{}, "svg">>,

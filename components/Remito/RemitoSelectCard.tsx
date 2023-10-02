@@ -1,11 +1,9 @@
 import { Avatar, Box, Card, CardContent, CardHeader, Divider, FormControl, Grid, InputLabel, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Select } from '@mui/material'
-import React, { FC } from 'react'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import { Dayjs } from 'dayjs'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { DatePicker, LocalizationProvider, esES } from '@mui/x-date-pickers'
+import React, { FC, useEffect } from 'react'
 import ListIcon from '@mui/icons-material/List';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import { Iremito } from '@/interfaces';
+import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 
 const remitos = [
   123456,
@@ -26,9 +24,11 @@ const remitos = [
 interface Props {
   remitoCode: string,
   remitoCodeChange: (newValue: any) => void,
+  remitos: Iremito[]
 }
 
-export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange}) => {
+export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange, remitos}) => {
+  
   
   return (
 
@@ -37,7 +37,7 @@ export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange}) => {
         <CardHeader
             avatar={
               <Avatar>
-                <ListAltIcon/>
+                <FolderOpenOutlinedIcon/>
               </Avatar>
             }
             title='Remitos'
@@ -62,16 +62,17 @@ export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange}) => {
                 sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                 aria-label="contacts"
               >
-                {remitos.map((name) => (
+                {remitos.map((remito) => (
                   <ListItem
-                    key={name}
+                    key={remito.number}
                     disablePadding
+                    onClick={()=>remitoCodeChange(remito.number)}
                   >
-                    <ListItemButton>
+                    <ListItemButton selected={ remito.number === remitoCode }>
                       <ListItemIcon>
                         <ListIcon />
                       </ListItemIcon>
-                      <ListItemText primary={name} secondary={'12/09/2023'} />
+                      <ListItemText primary={remito.number} secondary={remito.date} />
                     </ListItemButton>
                   </ListItem>
                 ))}

@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Personal } from '@/models';
-import { IOm, IPersonal,  } from '@/interfaces';
+import { IOm, IPersonal, Iremito,  } from '@/interfaces';
 import { db } from '@/database';
 import Om from '@/models/Om';
 import Remito from '@/models/Remito';
@@ -9,7 +9,7 @@ import Remito from '@/models/Remito';
 
 type Data = 
   | {message: string}
-  | IOm[]
+  | Iremito[]
 
 
 export default async function handler(
@@ -19,7 +19,7 @@ export default async function handler(
 
     switch ( req.method ) {
         case 'GET':
-            return getRemito( req, res )
+            return getRemitoByObra( req, res )
         case 'POST':
             return createRemito( req, res )
         case 'PUT':
@@ -35,20 +35,20 @@ export default async function handler(
 }
 
 
-const getRemito = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getRemitoByObra = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
-    // try {
+    try {
 
-    //     await db.connect();
-    //     const om = await Om.find(req.query).lean();
-    //     await db.disconnect();
-    //     return res.status(200).json( om );
+        await db.connect();
+        const remitos = await Remito.find({ obra:'1371' }).lean();
+        await db.disconnect();
+        return res.status(200).json( remitos );
         
-    // } catch (error) {
-    //     console.log(error);
-    //     await db.disconnect();
-    //     return res.status(400).json({ message: 'Revisar logs del servidor' });
-    // }
+    } catch (error) {
+        console.log(error);
+        await db.disconnect();
+        return res.status(400).json({ message: 'Revisar logs del servidor' });
+    }
 
 }
 

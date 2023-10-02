@@ -1,34 +1,14 @@
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { Alert, Avatar, Box, Button, Card, CardHeader, Divider, Grid, Snackbar, useMediaQuery, useTheme } from '@mui/material';
-import { DataGrid, GridColDef, GridRowsProp, GridValidRowModel, useGridApiRef } from '@mui/x-data-grid'
+import {  Avatar, Box, Button, Card, CardHeader, Divider, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { DataGrid, GridColDef, GridRowsProp, useGridApiRef } from '@mui/x-data-grid'
 
-import { UiContext } from '@/context'
-import { horarios, tareas } from '@/config'
-import { Asistencia } from '@/interfaces'
+import {  Iremito } from '@/interfaces'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
-import { QuickSearch } from '../DataGrid';
-import { DotMenu } from '../DataGrid';
 import { useRouter } from 'next/router';
 import { RemitoAddModal } from './RemitoAddModal';
-
-const data = [
-  {om: '1371-OM-001', code: 'A001', cantidad: 10},
-  {om: '1371-OM-002', code: 'da', cantidad: 10},
-  {om: '1371-OM-001', code: 'das', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', code: 'wtbtr', cantidad: 10},
-  {om: '1371-OM-001', code: 'bbvd', cantidad: 10},
-  {om: '1371-OM-001', code: 'mjmuy', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', code: 'nyli', cantidad: 10},
-  {om: '1371-OM-001', code: 'nbtj', cantidad: 10},
-  {om: '1371-OM-001', code: 'fmuy', cantidad: 10},
-  {om: '1371-OM-001', code: 'myufb', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', code: 'ngig', cantidad: 10},
-  {om: '1371-OM-001', code: 'nfnty', cantidad: 10},
-  {om: '1371-OM-001', code: 'bnrnty', idMod: 456, cantidad: 10},
-  {om: '1371-OM-001', code: 'nftynf', cantidad: 10},
-]
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
 interface Props {
   obra: any,
@@ -36,11 +16,14 @@ interface Props {
     idObra: string,
     name  : string
   }[],
+  remito: Iremito | undefined
 }
 
-export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
+export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
 
-  const initialRows: GridRowsProp  = data.map( (elemento: any) => ({
+  if (!remito) return <></>
+
+  const initialRows: GridRowsProp  = remito.elementos.map( (elemento: any) => ({
     id: elemento.om + '-' + elemento.code ,
     om: elemento.om,
     code: elemento.code,
@@ -105,7 +88,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
         <CardHeader
             avatar={
               <Avatar>
-                <PeopleAltOutlinedIcon/>
+                <AssignmentOutlinedIcon/>
               </Avatar>
             }
             action={
@@ -119,7 +102,8 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
                 </Button>
               </Box>
             }
-            title='Asistencia'
+            title={`Remito Nro: ${remito.number}`}
+            titleTypographyProps={{variant:'h6' }}
         />
 
         <RemitoAddModal
@@ -134,7 +118,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames}) => {
 
         <DataGrid
             apiRef={apiRef}
-            rows={rows}
+            rows={initialRows}
             columns={columns}
             rowHeight={35}
             hideFooterSelectedRowCount

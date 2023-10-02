@@ -238,13 +238,6 @@ export const OmDataGrid:FC<Props> = ({data, obra, setIsMutating}) => {
       )
     }
 
-    const handleOpenReceiveModal = (id:string) => {
-      setOpenOmReceiveModal(true);
-      setOmData(
-        data.find((om:any) => om.name === id)
-      )
-    }
-
     const handleOpenRquestModal  = (id:string) => {
       setOpenRequestModal({ status: true, id: id });
     }

@@ -1,12 +1,13 @@
 import { ObraLayout } from "@/components/layouts"
-import { dbObras, dbUsers } from "@/database"
-import { IObra, IUser } from "@/interfaces"
+import { dbObras, dbRemito, dbUsers } from "@/database"
+import { IObra, IUser, Iremito } from "@/interfaces"
 import { GetServerSideProps, NextPage } from "next"
 import { CustomBreadCrumbs } from "@/components/ui";
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import { RemitoSelectCard } from "@/components/Remito";
 import { RemitoDataGrid } from "@/components/Remito/RemitoDataGrid";
+import { useRemito } from "@/hooks";
 
 
 
@@ -16,25 +17,23 @@ interface Props {
       idObra: string,
       name  : string
     }[],
+    remitos: Iremito[]
 }
 
 
-export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames }) => {
+export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, remitos }) => {
 
   const [remitoCode, setRemitoCode] = useState('')
-
+  const [remitoSelected, setRemitoSelected] = useState<Iremito | undefined>(remitos[0])
+  
   const breadcrumbsRef = [
     { key: 'obra', name: obra.name, link: `/obra/${obra.idObra}` },
     { key: 'breadSecond', name: 'Remito', link: undefined },
   ]
 
-  const onGetRemito = (newValue: any) => {
-
-  }
-
   const handleRemitoCodeChange = (newValue: any) => {
     setRemitoCode(newValue)
-    onGetRemito(newValue)
+    setRemitoSelected(remitos.find((obj:any) => obj.number === newValue))
   } 
 
   return (
@@ -55,6 +54,7 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames }) => {
               <RemitoSelectCard 
                 remitoCode={remitoCode}
                 remitoCodeChange={handleRemitoCodeChange}
+                remitos={remitos}
               />
               
 
@@ -62,10 +62,14 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames }) => {
 
             <Grid container item spacing={2} xs={12} lg={9}>
 
+                
                 <RemitoDataGrid
                   obra={obra}
                   obraNames={obraNames}
-                />   
+                  remito={ remitoSelected } 
+                />  
+                
+            
                               
             </Grid>
 
@@ -82,11 +86,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   const obra = await dbObras.getObrasById( idObra.toString() );
   const obraNames = await dbObras.getAllObras();
+  const remitos = await dbRemito.getRemitoByObra( idObra.toString() )
 
   return {
       props: { 
         obra: obra,
-        obraNames: obraNames
+        obraNames: obraNames,
+        remitos: remitos
        }
   }
 }

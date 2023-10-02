@@ -60,7 +60,7 @@ export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNa
             const submitted = await adminObraApi.post(`/remito`, {
                 number       : remitoNro,
                 obra         : obraSelect,
-                date         : date,
+                date         : date!.format('DD/MM/YYYY').toString(),
                 observaciones: observaciones,
                 elementos    : elementRows
 
