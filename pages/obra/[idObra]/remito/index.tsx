@@ -24,7 +24,7 @@ interface Props {
 export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, remitos }) => {
 
   const [remitoCode, setRemitoCode] = useState('')
-  const [remitoSelected, setRemitoSelected] = useState<Iremito | undefined>(remitos[0])
+  const [remitoSelected, setRemitoSelected] = useState<any>(remitos[0])
   
   const breadcrumbsRef = [
     { key: 'obra', name: obra.name, link: `/obra/${obra.idObra}` },

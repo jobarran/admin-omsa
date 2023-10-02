@@ -16,12 +16,12 @@ interface Props {
     idObra: string,
     name  : string
   }[],
-  remito: Iremito | undefined
+  remito: Iremito
 }
 
 export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
 
-  if (!remito) return <></>
+  // if (!remito) return <></>
 
   const initialRows: GridRowsProp  = remito.elementos.map( (elemento: any) => ({
     id: elemento.om + '-' + elemento.code ,
@@ -31,8 +31,8 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
     cantidad: elemento.cantidad,
   }))
 
-  const [rows, setRows] = useState(initialRows);
   const apiRef = useGridApiRef();
+  const [rows, setRows] = useState(initialRows);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([])
   const [searchBox, setSearchBox] = useState<any[]>([])
