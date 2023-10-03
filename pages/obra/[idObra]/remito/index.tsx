@@ -4,10 +4,11 @@ import { IObra, IUser, Iremito } from "@/interfaces"
 import { GetServerSideProps, NextPage } from "next"
 import { CustomBreadCrumbs } from "@/components/ui";
 import { Grid } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RemitoSelectCard } from "@/components/Remito";
 import { RemitoDataGrid } from "@/components/Remito/RemitoDataGrid";
 import { useRemito } from "@/hooks";
+import { GridRowsProp } from "@mui/x-data-grid";
 
 
 
@@ -17,23 +18,29 @@ interface Props {
       idObra: string,
       name  : string
     }[],
-    remitos: Iremito[]
+    lastRemito: Iremito
 }
 
 
-export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, remitos }) => {
+export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito }) => {
 
-  const [remitoCode, setRemitoCode] = useState('')
-  const [remitoSelected, setRemitoSelected] = useState<any>(remitos[0])
+  const { data, error, isLoading, mutate } = useRemito(`/remito?obra=${obra.idObra}`)
+  const [remitoCode, setRemitoCode] = useState(lastRemito.number)
+  const [isMutating, setIsMutating] = useState(false)
+  const [remitoSelected, setRemitoSelected] = useState<any>(lastRemito)
   
   const breadcrumbsRef = [
     { key: 'obra', name: obra.name, link: `/obra/${obra.idObra}` },
     { key: 'breadSecond', name: 'Remito', link: undefined },
   ]
 
+  useEffect(() => {
+    mutate()
+  }, [isMutating])
+
   const handleRemitoCodeChange = (newValue: any) => {
     setRemitoCode(newValue)
-    setRemitoSelected(remitos.find((obj:any) => obj.number === newValue))
+    setRemitoSelected(data.find((obj:any) => obj.number === newValue))
   } 
 
   return (
@@ -49,26 +56,38 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, remitos }) =>
 
         <Grid container spacing={2}>
             
-            <Grid container item spacing={2} xs={12} lg={3} >
+            <Grid container item spacing={2} xs={12} md={4} lg={3} >
 
-              <RemitoSelectCard 
-                remitoCode={remitoCode}
-                remitoCodeChange={handleRemitoCodeChange}
-                remitos={remitos}
-              />
+              {
+                data && !isLoading
+                ?
+                  <RemitoSelectCard 
+                    remitoCode={remitoCode}
+                    remitoCodeChange={handleRemitoCodeChange}
+                    remitos={data}
+                    
+                  />
+                : 
+                <></>
+              }
+              
               
 
             </Grid>
 
-            <Grid container item spacing={2} xs={12} lg={9}>
+            <Grid container item spacing={2} xs={12} md={8} lg={9}>
 
-                
+            {
+                data && !isLoading
+                ?
                 <RemitoDataGrid
                   obra={obra}
                   obraNames={obraNames}
-                  remito={ remitoSelected } 
-                />  
-                
+                  remitoSelected={remitoSelected}
+                  setIsMutating={setIsMutating}
+                />
+                : <></>  
+            }
             
                               
             </Grid>
@@ -86,13 +105,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   const obra = await dbObras.getObrasById( idObra.toString() );
   const obraNames = await dbObras.getAllObras();
-  const remitos = await dbRemito.getRemitoByObra( idObra.toString() )
+  const lastRemito = await dbRemito.getLastRemitoByObra( idObra.toString() )
 
   return {
       props: { 
         obra: obra,
         obraNames: obraNames,
-        remitos: remitos
+        lastRemito: lastRemito
        }
   }
 }

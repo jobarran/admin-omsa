@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {  Avatar, Box, Button, Card, CardHeader, Divider, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp, useGridApiRef } from '@mui/x-data-grid'
@@ -16,14 +16,15 @@ interface Props {
     idObra: string,
     name  : string
   }[],
-  remito: Iremito
+  setIsMutating: any,
+  remitoSelected:Iremito,
 }
 
-export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
+export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remitoSelected}) => {
 
   // if (!remito) return <></>
 
-  const initialRows: GridRowsProp  = remito.elementos.map( (elemento: any) => ({
+  const rows: GridRowsProp  = remitoSelected.elementos.map( (elemento: any) => ({
     id: elemento.om + '-' + elemento.code ,
     om: elemento.om,
     code: elemento.code,
@@ -32,14 +33,13 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
   }))
 
   const apiRef = useGridApiRef();
-  const [rows, setRows] = useState(initialRows);
+  
   const [openModal, setOpenModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([])
   const [searchBox, setSearchBox] = useState<any[]>([])
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const router = useRouter()
-
+  const router = useRouter()  
 
   const columns: GridColDef[] = [
       {
@@ -67,12 +67,12 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
         maxWidth: 350,
       },
       {
-          field: 'cantidad',
-          headerName: 'Cantidad',
-          editable: false,
-          flex: 1,
-          minWidth: 160,
-          maxWidth: 350,
+        field: 'cantidad',
+        headerName: 'Cantidad',
+        editable: false,
+        flex: 1,
+        minWidth: 160,
+        maxWidth: 350,
       },
     ];
 
@@ -102,7 +102,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
                 </Button>
               </Box>
             }
-            title={`Remito Nro: ${remito.number}`}
+            title={`Remito Nro: ${remitoSelected.number}`}
             titleTypographyProps={{variant:'h6' }}
         />
 
@@ -111,6 +111,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
             setOpenModal={setOpenModal}
             obra={obra}
             obraNames={obraNames}
+            setIsMutating={setIsMutating}
         />
         
 
@@ -118,7 +119,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, remito}) => {
 
         <DataGrid
             apiRef={apiRef}
-            rows={initialRows}
+            rows={rows}
             columns={columns}
             rowHeight={35}
             hideFooterSelectedRowCount

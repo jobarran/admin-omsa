@@ -35,10 +35,11 @@ interface Props {
         idObra: string,
         name  : string
       }[],
+    setIsMutating: any
 }
 
 
-export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNames}) => {
+export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNames, setIsMutating}) => {
     
 
     
@@ -69,6 +70,10 @@ export const RemitoAddModal:FC<Props> = ({ openModal, setOpenModal, obra, obraNa
             if (submitted.statusText === 'Created') {
                 setOpenModal(false)
                 setElementRows([])
+                setIsMutating(true)
+                setTimeout(() => {
+                    setIsMutating(false)
+                }, 1000);
             }
         } catch (error) {
             setShowError(true)

@@ -40,7 +40,10 @@ const getRemitoByObra = async(req: NextApiRequest, res: NextApiResponse<Data>) =
     try {
 
         await db.connect();
-        const remitos = await Remito.find({ obra:'1371' }).lean();
+        const remitos = await Remito
+            .find(req.query)
+            .sort({ createdAt: -1 })
+            .lean();
         await db.disconnect();
         return res.status(200).json( remitos );
         
