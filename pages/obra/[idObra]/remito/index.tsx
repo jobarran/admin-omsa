@@ -5,7 +5,7 @@ import { GetServerSideProps, NextPage } from "next"
 import { CustomBreadCrumbs } from "@/components/ui";
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { RemitoSelectCard } from "@/components/Remito";
+import { RemitoDataGridLoading, RemitoDataGridNoData, RemitoSelectCard } from "@/components/Remito";
 import { RemitoDataGrid } from "@/components/Remito/RemitoDataGrid";
 import { useRemito } from "@/hooks";
 import { GridRowsProp } from "@mui/x-data-grid";
@@ -28,9 +28,9 @@ interface Props {
 export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito }) => {
 
   const { data, error, isLoading, mutate } = useRemito(`/remito?obra=${obra.idObra}`)
-  const [remitoCode, setRemitoCode] = useState(lastRemito.number)
+  const [remitoCode, setRemitoCode] = useState( lastRemito ? lastRemito.number : '')
   const [isMutating, setIsMutating] = useState(false)
-  const [remitoSelected, setRemitoSelected] = useState<any>(lastRemito)
+  const [remitoSelected, setRemitoSelected] = useState<any>( lastRemito )
   
   const breadcrumbsRef = [
     { key: 'obra', name: obra.name, link: `/obra/${obra.idObra}` },
@@ -84,7 +84,7 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito })
             <Grid container item spacing={2} xs={12} md={4} lg={3} >
 
               {
-                data && !isLoading
+                data && !isLoading 
                 ?
                   <RemitoSelectCard 
                     remitoCode={remitoCode}
@@ -103,7 +103,14 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito })
             <Grid container item spacing={2} xs={12} md={8} lg={9}>
 
             {
-                data && !isLoading
+              !remitoSelected
+              ? <RemitoDataGridNoData
+                obra={obra}
+                obraNames={obraNames}
+                setIsMutating={setIsMutating}
+              />
+              :
+                data && !isLoading 
                 ?
                 <RemitoDataGrid
                   obra={obra}
@@ -112,7 +119,7 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito })
                   setIsMutating={setIsMutating}
                   remitoCodeChange={handleRemitoCodeChange}
                 />
-                : <></>  
+                : <RemitoDataGridLoading/>  
             }
             
                               

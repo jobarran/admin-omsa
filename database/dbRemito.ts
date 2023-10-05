@@ -29,6 +29,7 @@ export const getRemitoByNumber = async ()  => {
 export const getLastRemitoByObra = async ( idObra: string ): Promise<Iremito | null> => {
 
     await db.connect()
+    
     const lastRemito = await Remito
         .find({ obra: idObra })
         .sort({ number: -1 })
@@ -37,10 +38,11 @@ export const getLastRemitoByObra = async ( idObra: string ): Promise<Iremito | n
         .lean()
     await db.disconnect()
 
-    if ( !lastRemito ) {
+    if ( lastRemito.length < 1 ) {
+        console.log('es por aca')
         return null;
     }
 
     return JSON.parse(JSON.stringify( lastRemito[0] ))
-
+    
 }

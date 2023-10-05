@@ -5,26 +5,10 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import { Iremito } from '@/interfaces';
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 
-const remitos = [
-  123456,
-  654123,
-  546987,
-  631978,
-  654197,
-  664498,
-  785469,
-  136489,
-  681354,
-  464646,
-  134687,
-  967894
-]
-
-
 interface Props {
   remitoCode: string,
   remitoCodeChange: (newValue: any) => void,
-  remitos: Iremito[],
+  remitos: Iremito[] | never[] 
 }
 
 export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange, remitos}) => {
@@ -66,9 +50,10 @@ export const RemitoSelectCard:FC<Props> = ({remitoCode, remitoCodeChange, remito
                     mb: 2,
                     display: "flex",
                     flexDirection: "column",
-                    height: 600,
+                    minHeight: 250,
+                    maxHeight: 600,
                     overflow: "hidden",
-                    overflowY: "scroll",
+                    overflowY: remitos.length > 0 ? "scroll" : "hidden",
                   // justifyContent="flex-end" # DO NOT USE THIS WITH 'scroll'
                   }}
                 >
