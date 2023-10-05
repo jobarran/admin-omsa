@@ -31,7 +31,7 @@ export const getLastRemitoByObra = async ( idObra: string ): Promise<Iremito | n
     await db.connect()
     const lastRemito = await Remito
         .find({ obra: idObra })
-        .sort({ createdAt: -1 })
+        .sort({ number: -1 })
         .limit(1)
         .select('-_id')
         .lean()

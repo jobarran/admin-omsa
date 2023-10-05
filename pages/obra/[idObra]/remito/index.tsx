@@ -10,7 +10,10 @@ import { RemitoDataGrid } from "@/components/Remito/RemitoDataGrid";
 import { useRemito } from "@/hooks";
 import { GridRowsProp } from "@mui/x-data-grid";
 
-
+interface NestedObject {
+  element: any;
+  [key: string]: any;
+}
 
 interface Props {
     obra: IObra,
@@ -39,9 +42,31 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito })
   }, [isMutating])
 
   const handleRemitoCodeChange = (newValue: any) => {
-    setRemitoCode(newValue)
-    setRemitoSelected(data.find((obj:any) => obj.number === newValue))
+    if ( newValue !== 'all' ) {
+      setRemitoCode(newValue)
+      setRemitoSelected(data.find((obj:any) => obj.number === newValue))
+    } else {
+      setRemitoCode('all')
+      const allData = getAllRemitosElementos(data)
+      setRemitoSelected({numero: 'all', elementos: allData})
+    }
   } 
+
+  function getAllRemitosElementos(arr: any): NestedObject[] {
+
+    const result: NestedObject[] = [];
+  
+    function collectElements(obj: NestedObject) {
+      if (obj.elementos && Array.isArray(obj.elementos)) {
+        result.push(...obj.elementos);
+        obj.elementos.forEach((nestedObj) => collectElements(nestedObj));
+      }
+    }
+  
+    arr.forEach((obj:any) => collectElements(obj));
+  
+    return Array.from(new Set(result)); // Use Set to ensure uniqueness
+  }
 
   return (
     <>
@@ -85,6 +110,7 @@ export const ObraRemitoPage: NextPage<Props> = ({ obra, obraNames, lastRemito })
                   obraNames={obraNames}
                   remitoSelected={remitoSelected}
                   setIsMutating={setIsMutating}
+                  remitoCodeChange={handleRemitoCodeChange}
                 />
                 : <></>  
             }

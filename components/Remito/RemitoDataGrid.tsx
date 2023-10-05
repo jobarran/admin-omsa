@@ -9,6 +9,8 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import { useRouter } from 'next/router';
 import { RemitoAddModal } from './RemitoAddModal';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import { randomId } from '../../utils/randomId';
+import { QuickSearch } from '../DataGrid';
 
 interface Props {
   obra: any,
@@ -18,11 +20,11 @@ interface Props {
   }[],
   setIsMutating: any,
   remitoSelected:Iremito,
+  remitoCodeChange: any
+
 }
 
-export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remitoSelected}) => {
-
-  // if (!remito) return <></>
+export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remitoSelected, remitoCodeChange}) => {
 
   const rows: GridRowsProp  = remitoSelected.elementos.map( (elemento: any) => ({
     id: elemento.om + '-' + elemento.code ,
@@ -30,16 +32,19 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remito
     code: elemento.code,
     idMod: elemento.idMod || '',
     cantidad: elemento.cantidad,
+    randomID: randomId()
   }))
 
   const apiRef = useGridApiRef();
-  
+
   const [openModal, setOpenModal] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<any[]>([])
   const [searchBox, setSearchBox] = useState<any[]>([])
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const router = useRouter()  
+
+  useEffect(() => {
+    apiRef.current.setQuickFilterValues(searchBox)
+  }, [searchBox])
 
   const columns: GridColDef[] = [
       {
@@ -79,6 +84,10 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remito
     const handleOpenModal = () => {
       setOpenModal(true);
     };
+
+    const handleSearchInputChange = (input:any) => {
+      setSearchBox(input)
+    }
   
   return (
 
@@ -93,6 +102,20 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remito
             }
             action={
               <Box display='flex' >
+
+              <QuickSearch
+                data={ searchBox }
+                handleSearchInputChange={ handleSearchInputChange }
+                handleDataReset={ setSearchBox }
+              />
+
+              <Button
+                    sx={{mt:0.5, ml:0.5, display:{xs:'none', md:'flex'}}}
+                    variant="outlined"
+                    onClick={()=>remitoCodeChange('all')}
+                >
+                  Ver todos los elementos
+                </Button>
                
                 <Button 
                   sx={{mt:0.5, ml:0.5 }}
@@ -102,7 +125,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remito
                 </Button>
               </Box>
             }
-            title={`Remito Nro: ${remitoSelected.number}`}
+            title={remitoSelected.number ? `Remito Nro: ${ remitoSelected.number}` : 'Todos los remitos'}
             titleTypographyProps={{variant:'h6' }}
         />
 
@@ -121,6 +144,7 @@ export const RemitoDataGrid:FC<Props> = ({obra, obraNames, setIsMutating, remito
             apiRef={apiRef}
             rows={rows}
             columns={columns}
+            getRowId={(row) => row.om+row.code+row.id+row.randomID}
             rowHeight={35}
             hideFooterSelectedRowCount
             hideFooterPagination
